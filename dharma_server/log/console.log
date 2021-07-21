@@ -1,0 +1,817 @@
+2021-07-21 11:53:36.248 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 11:53:36.249 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 11:53:36.253 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 11:53:36.253 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 11:53:36.254 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 11:53:36.254 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 11:53:36.297 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 11:53:36.297 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 11:53:36.303 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 11:53:36.305 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 11:53:36.306 [error] <0.270.0>@Elixir.Connector:start_connection CRASH REPORT Process <0.270.0> with 0 neighbours crashed with reason: call to undefined function 'Elixir.Connector':start_connection()
+2021-07-21 11:53:36.314 [error] <0.268.0> CRASH REPORT Process <0.268.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 11:53:36.314 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 11:53:36.316 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 11:53:36.318 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 11:53:36.318 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 11:53:36.319 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:05:02.202 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:05:02.204 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:05:02.212 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:05:02.213 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:05:02.213 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:05:02.213 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:05:02.255 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:05:02.255 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:05:02.261 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:05:02.263 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:05:02.264 [error] <0.297.0>@Elixir.Connector.Connector:init:13 CRASH REPORT Process <0.297.0> with 0 neighbours crashed with reason: bad argument in call to erlang:spawn('Elixir.Connector.Extractor', loop, nil) in 'Elixir.Connector.Connector':init/1 line 13
+2021-07-21 12:05:02.268 [error] <0.295.0> CRASH REPORT Process <0.295.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:05:02.268 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:05:02.270 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:05:02.271 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:05:02.271 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:05:02.272 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:05:16.462 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:05:16.463 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:05:16.470 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:05:16.470 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:05:16.470 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:05:16.470 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:05:16.509 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:05:16.509 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:05:16.515 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:05:16.518 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:05:16.519 [error] <0.286.0>@Elixir.Connector.Connector:init:13 CRASH REPORT Process <0.286.0> with 0 neighbours crashed with reason: bad argument in call to erlang:spawn('Elixir.Connector.Extractor', loop, nil) in 'Elixir.Connector.Connector':init/1 line 13
+2021-07-21 12:05:16.527 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:05:16.527 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :error was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:05:16.529 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:05:16.531 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:05:16.532 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:05:16.532 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:07:13.763 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:07:13.765 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:07:13.771 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:07:13.771 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:07:13.771 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:07:13.771 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:07:13.811 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:07:13.811 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:07:13.818 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:07:13.820 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:07:13.821 [error] emulator Error in process <0.292.0> with exit value:
+{{badarity,{#Fun<Elixir.Connector.Connector.0.11176859>,[]}},[{erlang,apply,2,[]}]}
+2021-07-21 12:07:13.866 [error] <0.289.0> CRASH REPORT Process <0.289.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:07:13.866 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:07:13.868 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:07:13.870 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:07:13.870 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:07:13.871 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:07:55.198 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:07:55.200 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:07:55.203 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:07:55.204 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:07:55.204 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:07:55.204 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:07:55.244 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:07:55.244 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:07:55.250 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:07:55.252 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:07:55.252 [error] emulator Error in process <0.328.0> with exit value:
+{{badarity,{#Fun<Elixir.Connector.Connector.0.11176859>,[]}},[{erlang,apply,2,[]}]}
+2021-07-21 12:07:55.295 [error] <0.325.0> CRASH REPORT Process <0.325.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:07:55.295 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:07:55.296 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:07:55.298 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:07:55.298 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:07:55.299 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:09:49.621 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:09:49.623 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:09:49.628 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:09:49.628 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:09:49.628 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:09:49.628 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:09:49.668 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:09:49.668 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:09:49.675 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:09:49.677 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:09:49.722 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:09:49.722 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:09:49.722 [error] emulator Error in process <0.287.0> with exit value:
+{function_clause,[{'Elixir.String',trim,[{error,terminated}],[{file,"lib/string.ex"},{line,1231}]},{'Elixir.Connector.Extractor',loop,0,[{file,"lib/connector/extractor.ex"},{line,5}]}]}
+2021-07-21 12:09:49.724 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:09:49.727 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:09:49.727 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:09:49.728 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:11:41.891 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:11:41.893 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:11:41.899 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:11:41.899 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:11:41.899 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:11:41.899 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:11:41.943 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:11:41.943 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:11:41.949 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:11:41.952 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:11:42.006 [error] <0.279.0> CRASH REPORT Process <0.279.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:11:42.006 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:11:42.006 [error] emulator Error in process <0.282.0> with exit value:
+{function_clause,[{'Elixir.String',trim,[{error,terminated}],[{file,"lib/string.ex"},{line,1231}]},{'Elixir.Connector.Extractor',loop,0,[{file,"lib/connector/extractor.ex"},{line,5}]}]}
+2021-07-21 12:11:42.010 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:11:42.011 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:11:42.011 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:11:42.012 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:14:45.427 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:14:45.429 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:14:45.433 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:14:45.433 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:14:45.433 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:14:45.433 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:14:45.476 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:14:45.476 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:14:45.483 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:14:45.485 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:14:45.534 [error] <0.295.0> CRASH REPORT Process <0.295.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:14:45.534 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:14:45.536 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:14:45.538 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:14:45.538 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:14:45.539 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:14:49.230 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:14:49.232 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:14:49.235 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:14:49.236 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:14:49.236 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:14:49.236 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:14:49.277 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:14:49.277 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:14:49.283 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:14:49.284 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:14:49.330 [error] <0.268.0> CRASH REPORT Process <0.268.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:14:49.330 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:14:49.332 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:14:49.334 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:14:49.335 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:14:49.335 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:16:36.361 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:16:36.363 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:16:36.369 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:16:36.369 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:16:36.369 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:16:36.369 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:16:36.410 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:16:36.410 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:16:36.417 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:16:36.419 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:16:36.465 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:16:36.465 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:16:36.467 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:16:36.468 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:16:36.468 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:16:36.469 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:17:12.464 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:17:12.466 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:17:12.470 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:17:12.470 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:17:12.470 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:17:12.470 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:17:12.509 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:17:12.509 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:17:12.515 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:17:12.517 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:17:12.575 [error] <0.282.0> CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:17:12.575 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:17:12.576 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:17:12.578 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:17:12.578 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:17:12.579 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:17:43.630 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:17:43.633 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:17:43.639 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:17:43.639 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:17:43.640 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:17:43.640 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:17:43.680 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:17:43.680 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:17:43.687 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:17:43.688 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:17:43.736 [error] <0.289.0> CRASH REPORT Process <0.289.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:17:43.736 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:17:43.736 [error] <0.291.0> gen_server 'Elixir.Connector.Connector' terminated with reason: {terminated,[{io,put_chars,[standard_io,unicode,[<<" [x] Sent '[connectors.github.new] fst msg'">>,10]],[]},{'Elixir.Connector.Connector',handle_call,3,[{file,"lib/connector/connector.ex"},{line,21}]},{gen_server,try_handle_call,4,[{file,"gen_server.erl"},{line,721}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,750}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+2021-07-21 12:17:43.738 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:17:43.741 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:17:43.741 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:17:43.742 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:17:43.742 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:17:43.742 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:17:43.742 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:17:43.743 [error] <0.291.0> CRASH REPORT Process 'Elixir.Connector.Connector' with 0 neighbours crashed with reason: {terminated,[{io,put_chars,[standard_io,unicode,[<<" [x] Sent '[connectors.github.new] fst msg'">>,10]],[]},{'Elixir.Connector.Connector',handle_call,3,[{file,"lib/connector/connector.ex"},{line,21}]},{gen_server,try_handle_call,4,[{file,"gen_server.erl"},{line,721}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,750}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+2021-07-21 12:17:43.743 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:17:43.743 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:18:53.501 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:18:53.504 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:18:53.507 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:18:53.507 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:18:53.507 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:18:53.508 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:18:53.545 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:18:53.546 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:18:53.552 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:18:53.554 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:18:53.597 [error] emulator Error in process <0.287.0> with exit value:
+{undef,[{thread,sleep,[200000000000],[]},{'Elixir.Connector.Extractor',loop,0,[{file,"lib/connector/extractor.ex"},{line,9}]}]}
+2021-07-21 12:18:53.598 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:18:53.598 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:18:53.603 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:18:53.604 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:18:53.604 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:18:53.605 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:19:40.192 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:19:40.194 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:19:40.199 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:19:40.199 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:19:40.199 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:19:40.199 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:19:40.239 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:19:40.239 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:19:40.245 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:19:40.247 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:19:40.292 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:19:40.293 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:19:40.295 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:19:40.296 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:19:40.296 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:19:40.297 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:20:03.543 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:20:03.545 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:20:03.550 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:20:03.550 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:20:03.550 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:20:03.550 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:20:03.589 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:20:03.589 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:20:03.595 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:20:03.597 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:20:03.640 [error] emulator Error in process <0.287.0> with exit value:
+{timeout_value,[{timer,sleep,1,[{file,"timer.erl"},{line,152}]},{'Elixir.Connector.Extractor',loop,0,[{file,"lib/connector/extractor.ex"},{line,9}]}]}
+2021-07-21 12:20:03.643 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:20:03.643 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:20:03.645 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:20:03.647 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:20:03.647 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:20:03.648 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:20:28.950 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:20:28.952 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:20:28.956 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:20:28.957 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:20:28.957 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:20:28.957 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:20:28.995 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:20:28.995 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:20:29.001 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:20:29.003 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:20:29.047 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:20:29.047 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:20:29.050 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:20:29.052 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:20:29.053 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:20:29.053 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:22:02.617 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:22:02.619 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:22:02.626 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:22:02.626 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:22:02.626 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:22:02.626 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:22:02.667 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:22:02.667 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:22:02.673 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:22:02.675 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:22:02.718 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:22:02.718 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:22:02.719 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:22:02.721 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:22:02.721 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:22:02.722 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:22:17.633 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:22:17.635 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:22:17.639 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:22:17.639 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:22:17.639 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:22:17.639 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:22:17.679 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:22:17.679 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:22:17.686 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:22:17.688 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:22:17.731 [error] <0.284.0> CRASH REPORT Process <0.284.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:22:17.731 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:22:17.732 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:22:17.735 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:22:17.736 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:22:17.736 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:23:29.712 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:23:29.714 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:23:29.719 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:23:29.719 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:23:29.719 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:23:29.719 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:23:29.759 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:23:29.760 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:23:29.765 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:23:29.767 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:23:29.768 [error] <0.282.0>@Elixir.Connector:start_link CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: call to undefined function 'Elixir.Connector':start_link() in application_master:init/4 line 142
+2021-07-21 12:23:29.768 [info] <0.44.0>@Elixir.Connector:start_link Application connector exited with reason: call to undefined function 'Elixir.Connector':start_link()
+2021-07-21 12:23:29.774 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:23:29.776 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:23:29.776 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:23:29.777 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:24:03.214 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:24:03.216 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:24:03.220 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:24:03.220 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:24:03.220 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:24:03.221 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:24:03.258 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:24:03.258 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:24:03.265 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:24:03.268 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:24:03.311 [error] <0.282.0> CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:24:03.311 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:24:03.312 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:24:03.315 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:24:03.316 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:24:03.316 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:24:37.821 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:24:37.822 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:24:37.828 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:24:37.829 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:24:37.829 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:24:37.829 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:24:37.869 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:24:37.869 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:24:37.875 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:24:37.877 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:24:37.881 [error] <0.284.0> Supervisor 'Elixir.Connector.Supervisor' had child 'Elixir.Connector' started with 'Elixir.Connector':start_link() at undefined exit with reason {'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_server.erl"},{line,423}]},{gen_server,init_it,6,[{file,"gen_..."},...]}]}} in context start_error
+2021-07-21 12:24:37.881 [error] <0.282.0>@Elixir.Connector.Application:start:22 CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector',{'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_s..."},...]},...]}}}}} in 'Elixir.Connector.Application':start/2 line 22 in application_master:init/4 line 142
+2021-07-21 12:24:37.881 [info] <0.44.0>@Elixir.Connector.Application:start:22 Application connector exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector',{'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_s..."},...]},...]}}}}} in 'Elixir.Connector.Application':start/2 line 22
+2021-07-21 12:24:37.885 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:24:37.887 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:25:06.333 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:25:06.334 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:25:06.341 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:25:06.342 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:25:06.342 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:25:06.342 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:25:06.380 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:25:06.380 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:25:06.386 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:25:06.388 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:25:06.394 [error] <0.284.0> Supervisor 'Elixir.Connector.Supervisor' had child 'Elixir.Connector' started with 'Elixir.Connector':start_link() at undefined exit with reason {'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_server.erl"},{line,423}]},{gen_server,init_it,6,[{file,"gen_..."},...]}]}} in context start_error
+2021-07-21 12:25:06.394 [error] <0.282.0>@Elixir.Connector.Application:start:22 CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector',{'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_s..."},...]},...]}}}}} in 'Elixir.Connector.Application':start/2 line 22 in application_master:init/4 line 142
+2021-07-21 12:25:06.394 [info] <0.44.0>@Elixir.Connector.Application:start:22 Application connector exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector',{'EXIT',{undef,[{'Elixir.Connector',start_link,[],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_s..."},...]},...]}}}}} in 'Elixir.Connector.Application':start/2 line 22
+2021-07-21 12:25:06.401 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:25:06.403 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:25:06.404 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:25:06.404 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:25:23.062 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:25:23.063 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:25:23.069 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:25:23.069 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:25:23.069 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:25:23.069 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:25:23.109 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:25:23.109 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:25:23.115 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:25:23.117 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:25:23.161 [error] <0.282.0> CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:25:23.161 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:25:23.163 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:25:23.166 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:25:23.167 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:25:23.167 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:26:06.522 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:26:06.523 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:26:06.527 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:26:06.527 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:26:06.528 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:26:06.528 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:26:06.567 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:26:06.567 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:26:06.573 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:26:06.575 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:26:06.575 [error] <0.282.0>@Elixir.Connector.Application:start CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: bad return value #{active => 0,specs => 0,supervisors => 0,workers => 0} from 'Elixir.Connector.Application':start(normal, []) in application_master:init/4 line 142
+2021-07-21 12:26:06.575 [info] <0.44.0>@Elixir.Connector.Application:start Application connector exited with reason: bad return value #{active => 0,specs => 0,supervisors => 0,workers => 0} from 'Elixir.Connector.Application':start(normal, [])
+2021-07-21 12:26:06.582 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:26:06.584 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:27:05.643 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:27:05.645 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:27:05.649 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:27:05.649 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:27:05.650 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:27:05.650 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:27:05.689 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:27:05.689 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:27:05.695 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:27:05.697 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:27:05.700 [error] <0.284.0> Supervisor 'Elixir.Connector.Supervisor' had child 'Elixir.Connector.Connector' started with 'Elixir.Connector.Connector':start_link(nil) at undefined exit with reason {'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_server.erl"},{line,423}]},{gen_server,init_it,6,...}]}} in context start_error
+2021-07-21 12:27:05.700 [error] <0.282.0>@Elixir.Connector.Application:start:20 CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector.Connector',{'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,...},...]}}}}} in 'Elixir.Connector.Application':start/2 line 20 in application_master:init/4 line 142
+2021-07-21 12:27:05.700 [info] <0.44.0>@Elixir.Connector.Application:start:20 Application connector exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector.Connector',{'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,...},...]}}}}} in 'Elixir.Connector.Application':start/2 line 20
+2021-07-21 12:27:05.707 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:27:05.710 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:27:05.710 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:27:05.711 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:27:21.683 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:27:21.686 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:27:21.690 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:27:21.690 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:27:21.690 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:27:21.690 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:27:21.733 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:27:21.733 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:27:21.739 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:27:21.741 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:27:21.744 [error] <0.284.0> Supervisor 'Elixir.Connector.Supervisor' had child 'Elixir.Connector.Connector' started with 'Elixir.Connector.Connector':start_link(nil) at undefined exit with reason {'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,2,[{file,"gen_server.erl"},{line,423}]},{gen_server,init_it,6,...}]}} in context start_error
+2021-07-21 12:27:21.744 [error] <0.282.0>@Elixir.Connector.Application:start:20 CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector.Connector',{'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,...},...]}}}}} in 'Elixir.Connector.Application':start/2 line 20 in application_master:init/4 line 142
+2021-07-21 12:27:21.744 [info] <0.44.0>@Elixir.Connector.Application:start:20 Application connector exited with reason: no match of right hand value {error,{shutdown,{failed_to_start_child,'Elixir.Connector.Connector',{'EXIT',{undef,[{'Elixir.Connector.Connector',start_link,[nil],[]},{supervisor,do_start_child_i,3,[{file,"supervisor.erl"},{line,414}]},{supervisor,do_start_child,2,[{file,"supervisor.erl"},{line,400}]},{supervisor,'-start_children/2-fun-0-',3,[{file,"supervisor.erl"},{line,384}]},{supervisor,children_map,4,[{file,"supervisor.erl"},{line,1234}]},{supervisor,init_children,2,[{file,"supervisor.erl"},{line,350}]},{gen_server,init_it,...},...]}}}}} in 'Elixir.Connector.Application':start/2 line 20
+2021-07-21 12:27:21.750 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:27:21.752 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:27:21.752 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:27:21.753 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:27:58.353 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:27:58.354 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:27:58.358 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:27:58.359 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:27:58.359 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:27:58.359 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:27:58.402 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:27:58.402 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:27:58.409 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:27:58.412 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:27:58.456 [error] <0.282.0> CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 12:27:58.456 [info] <0.44.0> Application connector exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module :ok was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631
+2021-07-21 12:27:58.457 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:27:58.460 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:27:58.461 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:27:58.461 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 12:35:33.389 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:35:33.392 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:35:33.395 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:35:33.395 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:35:33.395 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:35:33.396 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:35:33.439 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:35:33.439 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:35:33.445 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:35:33.448 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:35:33.491 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 12:35:33.492 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 12:36:32.352 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:36:32.354 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:36:32.358 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:36:32.358 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:36:32.358 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:36:32.359 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:36:32.398 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:36:32.398 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:36:32.403 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:36:32.405 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:36:32.406 [error] emulator Error in process <0.299.0> with exit value:
+{undef,[{'Elixir.Connector.Extractor',loop,[],[]}]}
+2021-07-21 12:36:32.461 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 12:36:32.462 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 12:37:11.014 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:37:11.016 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:37:11.019 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:37:11.019 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:37:11.020 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:37:11.020 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:37:11.061 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:37:11.061 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:37:11.067 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:37:11.069 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:37:11.112 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 12:37:11.114 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 12:38:21.422 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:38:21.424 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:38:21.429 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:38:21.429 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:38:21.429 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:38:21.429 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:38:21.470 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:38:21.471 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:38:21.477 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:38:21.480 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:38:21.517 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 12:38:21.519 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 12:38:50.594 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:38:50.596 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:38:50.600 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:38:50.600 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:38:50.600 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:38:50.600 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:38:50.639 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:38:50.639 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:38:50.646 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:38:50.648 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:38:50.689 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 12:38:50.690 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 12:40:37.134 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 12:40:37.137 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 12:40:37.141 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 12:40:37.142 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 12:40:37.142 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 12:40:37.142 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 12:40:37.181 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 12:40:37.181 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 12:40:37.187 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 12:40:37.189 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 12:40:37.228 [error] <0.282.0>@Elixir.Connector.Application:start CRASH REPORT Process <0.282.0> with 0 neighbours exited with reason: bad return value #{active => 1,specs => 1,supervisors => 0,workers => 1} from 'Elixir.Connector.Application':start(normal, []) in application_master:init/4 line 142
+2021-07-21 12:40:37.228 [info] <0.44.0>@Elixir.Connector.Application:start Application connector exited with reason: bad return value #{active => 1,specs => 1,supervisors => 0,workers => 1} from 'Elixir.Connector.Application':start(normal, [])
+2021-07-21 12:40:37.228 [error] emulator Error in process <0.286.0> with exit value:
+{function_clause,[{'Elixir.String',trim,[{error,terminated}],[{file,"lib/string.ex"},{line,1231}]},{'Elixir.Connector.Extractor',loop,1,[{file,"lib/connector/extractor.ex"},{line,5}]}]}
+2021-07-21 12:40:37.234 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 12:40:37.237 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 12:40:37.238 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 12:40:37.238 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 14:03:09.835 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 14:03:09.838 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 14:03:09.843 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 14:03:09.844 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 14:03:09.844 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 14:03:09.844 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 14:03:09.888 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 14:03:09.888 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 14:03:09.894 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 14:03:09.896 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 14:03:09.935 [error] <0.306.0>@Elixir.Connector.Application:start CRASH REPORT Process <0.306.0> with 0 neighbours exited with reason: bad return value #{active => 1,specs => 1,supervisors => 0,workers => 1} from 'Elixir.Connector.Application':start(normal, []) in application_master:init/4 line 142
+2021-07-21 14:03:09.935 [info] <0.44.0>@Elixir.Connector.Application:start Application connector exited with reason: bad return value #{active => 1,specs => 1,supervisors => 0,workers => 1} from 'Elixir.Connector.Application':start(normal, [])
+2021-07-21 14:03:09.935 [error] emulator Error in process <0.310.0> with exit value:
+{function_clause,[{'Elixir.String',trim,[{error,terminated}],[{file,"lib/string.ex"},{line,1231}]},{'Elixir.Connector.Extractor',loop,1,[{file,"lib/connector/extractor.ex"},{line,5}]}]}
+2021-07-21 14:03:09.940 [info] <0.44.0> Application amqp exited with reason: stopped
+2021-07-21 14:03:09.943 [info] <0.44.0> Application amqp_client exited with reason: stopped
+2021-07-21 14:03:09.943 [info] <0.44.0> Application rabbit_common exited with reason: stopped
+2021-07-21 14:03:09.944 [info] <0.44.0> Application credentials_obfuscation exited with reason: stopped
+2021-07-21 14:03:09.944 [info] <0.44.0> Application recon exited with reason: stopped
+2021-07-21 14:03:09.944 [info] <0.44.0> Application jsx exited with reason: stopped
+2021-07-21 14:03:09.944 [info] <0.44.0> Application tools exited with reason: stopped
+2021-07-21 14:03:09.945 [info] <0.44.0> Application sasl exited with reason: stopped
+2021-07-21 14:03:09.945 [info] <0.44.0> Application xmerl exited with reason: stopped
+2021-07-21 14:03:46.103 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 14:03:46.105 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 14:03:46.109 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 14:03:46.110 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 14:03:46.110 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 14:03:46.110 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 14:03:46.152 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 14:03:46.152 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 14:03:46.159 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 14:03:46.162 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 14:03:46.206 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 14:03:46.207 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 14:06:48.904 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 14:06:48.906 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 14:06:48.909 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 14:06:48.910 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 14:06:48.910 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 14:06:48.910 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 14:06:48.950 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 14:06:48.950 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 14:06:48.956 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 14:06:48.958 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 14:06:49.010 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 14:06:49.011 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 14:06:51.309 [error] emulator Error in process <0.272.0> with exit value:
+{{badmatch,[<<"asd ds">>]},[{'Elixir.Connector.Extractor',loop,1,[{file,"lib/connector/extractor.ex"},{line,3}]}]}
+2021-07-21 14:07:06.167 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 14:07:06.169 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 14:07:06.175 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 14:07:06.175 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 14:07:06.175 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 14:07:06.175 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 14:07:06.215 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 14:07:06.215 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 14:07:06.221 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 14:07:06.223 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 14:07:06.266 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 14:07:06.266 [info] <0.44.0> Application processor started on node nonode@nohost
+2021-07-21 15:13:51.956 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:13:51.959 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:13:51.963 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:13:51.963 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:13:51.964 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:13:51.964 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:13:52.004 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:13:52.004 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:13:52.011 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:13:52.012 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:13:52.048 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:13:52.054 [error] <0.345.0> CRASH REPORT Process <0.345.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module Processor.Processor was given as a child to a supervisor but it does not exist.">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 15:14:23.157 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:14:23.159 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:14:23.164 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:14:23.164 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:14:23.164 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:14:23.164 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:14:23.210 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:14:23.210 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:14:23.217 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:14:23.219 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:14:23.259 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:14:23.264 [error] <0.305.0> CRASH REPORT Process <0.305.0> with 0 neighbours exited with reason: #{'__exception__' => true,'__struct__' => 'Elixir.ArgumentError',message => <<"The module Processor.Processor was given as a child to a supervisor\nbut it does not implement child_spec/1.\n\nIf you own the given module, please define a child_spec/1 function\nthat receives an argument and returns a child specification as a map.\nFor example:\n\n    def child_spec(opts) do\n      %{\n        id: __MODULE__,\n        start: {__MODULE__, :start_link, [opts]},\n        type: :worker,\n        restart: :perman...">>} in 'Elixir.Supervisor':init_child/1 line 631 in application_master:init/4 line 142
+2021-07-21 15:15:59.415 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:15:59.416 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:15:59.425 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:15:59.425 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:15:59.426 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:15:59.426 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:15:59.468 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:15:59.468 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:15:59.474 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:15:59.476 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:15:59.520 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:15:59.521 [error] <0.305.0> CRASH REPORT Process <0.305.0> with 0 neighbours exited with reason: {start_spec,{duplicate_child_name,'Elixir.Processor.Processor'}} in gen_server:init_it/6 line 407
+2021-07-21 15:28:36.855 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:28:36.858 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:28:36.863 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:28:36.864 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:28:36.864 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:28:36.864 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:28:36.920 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:28:36.920 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:28:36.930 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:28:36.933 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:28:36.989 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:28:36.990 [error] <0.311.0> CRASH REPORT Process <0.311.0> with 0 neighbours exited with reason: {start_spec,{duplicate_child_name,'Elixir.Processor.Processor'}} in gen_server:init_it/6 line 407
+2021-07-21 15:29:19.863 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:29:19.867 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:29:19.876 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:29:19.877 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:29:19.877 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:29:19.877 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:29:19.932 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:29:19.932 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:29:19.942 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:29:19.946 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:29:20.015 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:29:20.018 [error] <0.305.0> CRASH REPORT Process <0.305.0> with 0 neighbours exited with reason: {start_spec,{duplicate_child_name,'Elixir.Processor.Processor'}} in gen_server:init_it/6 line 407
+2021-07-21 15:31:38.537 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:31:38.538 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:31:38.542 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:31:38.542 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:31:38.542 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:31:38.542 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:31:38.588 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:31:38.588 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:31:38.594 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:31:38.596 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:31:38.637 [info] <0.44.0> Application connector started on node nonode@nohost
+2021-07-21 15:31:38.640 [error] <0.306.0> CRASH REPORT Process <0.306.0> with 0 neighbours exited with reason: {start_spec,{duplicate_child_name,'Elixir.Processor.Processor'}} in gen_server:init_it/6 line 407
+2021-07-21 15:32:16.629 [info] <0.44.0> Application lager started on node nonode@nohost
+2021-07-21 15:32:16.632 [info] <0.44.0> Application xmerl started on node nonode@nohost
+2021-07-21 15:32:16.637 [info] <0.44.0> Application sasl started on node nonode@nohost
+2021-07-21 15:32:16.637 [info] <0.44.0> Application tools started on node nonode@nohost
+2021-07-21 15:32:16.637 [info] <0.44.0> Application jsx started on node nonode@nohost
+2021-07-21 15:32:16.637 [info] <0.44.0> Application recon started on node nonode@nohost
+2021-07-21 15:32:16.680 [info] <0.44.0> Application credentials_obfuscation started on node nonode@nohost
+2021-07-21 15:32:16.680 [info] <0.44.0> Application rabbit_common started on node nonode@nohost
+2021-07-21 15:32:16.686 [info] <0.44.0> Application amqp_client started on node nonode@nohost
+2021-07-21 15:32:16.688 [info] <0.44.0> Application amqp started on node nonode@nohost
+2021-07-21 15:32:16.733 [info] <0.44.0> Application connector started on node nonode@nohost
