@@ -1,24 +1,24 @@
-defmodule Connector.Connector do
+defmodule Connector do
   @moduledoc """
   Documentation for `Connector`.
   """
   use GenServer
 
-  def start_link(nil) do
+  def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], [{:name, __MODULE__}])
   end
 
   @impl true
   def init([]) do
-    pid = spawn(fn -> Connector.Extractor.loop  end)
+    pid = spawn(fn -> Extractor.loop  end)
     {connection, channel} = start_connection()
-    IO.puts "PID: #{inspect(pid)}"
+    #IO.puts "PID: #{inspect(pid)}"
     {:ok,{connection, channel, pid}}
   end
 
   @impl true
   def handle_call({:send, source, message}, _from, {_connection, channel, _pid} = state) do
-    routing = "connectors." <> source <> ".new"
+    routing = "insert.raw." <> source
     send(routing, message, channel)
     {:reply, state, state}
   end

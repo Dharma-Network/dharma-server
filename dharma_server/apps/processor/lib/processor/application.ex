@@ -7,14 +7,15 @@ defmodule Processor.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      # Starts a worker by calling: Processor.Worker.start_link(arg)
-      # {Processor.Worker, arg}
-    ]
-
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Processor.Supervisor]
-    Supervisor.start_link(children, opts)
+    read_children() |> Supervisor.start_link(opts)
   end
+
+  defp read_children do
+    Application.fetch_env!(:processor, :source)
+    |> Enum.map(fn x -> {Processor, x} end)
+  end
+
 end

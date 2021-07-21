@@ -10,13 +10,13 @@ defmodule Connector.Application do
     children = [
       # Starts a worker by calling:
       # Connector.Worker.start_link(arg)
-      {Connector.Connector, nil}
+      {Connector, []}
 
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Connector.Supervisor]
-    {:ok, pid} = Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, opts)
   end
 end
