@@ -11,7 +11,6 @@ defmodule Connector.Application do
       # Starts a worker by calling:
       # Connector.Worker.start_link(arg)
       {Connector, []}
-
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -24,7 +24,7 @@ defmodule Connector do
   """
   @impl true
   def init([]) do
-    pid = spawn(fn -> Extractor.loop  end)
+    {:ok, pid} = Task.start_link(fn -> Extractor.loop  end)
     {connection, channel} = start_connection()
     #IO.puts "PID: #{inspect(pid)}"
     {:ok,{connection, channel, pid}}
