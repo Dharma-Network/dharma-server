@@ -10,6 +10,7 @@ defmodule Connector.Application do
     children = [
       # Starts a worker by calling:
       # Connector.Worker.start_link(arg)
+      {Task.Supervisor, name: Connector.TaskSupervisor},
       {Connector, []}
     ]
 
