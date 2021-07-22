@@ -6,7 +6,21 @@ defmodule Processor.Application do
   @impl true
   def start(_type, _args) do
     opts = [strategy: :one_for_one, name: Processor.Supervisor]
-    read_children |> Supervisor.start_link(opts)
+    # children = read_children()
+    # children |> Supervisor.start_link(opts)
+    children = [
+      %{
+        id: Git,
+        start: {Processor, :start_link, ["github"]}
+      },
+      %{
+        id: Trello,
+        start: {Processor, :start_link, ["trello"]}
+      }
+    ]
+
+    Supervisor.start_link(children, opts)
+    # Supervisor.start_link([{Processor, "github"}, {Processor, "trello"}], opts)
   end
 
   # Reads the children that must be spawned (to read from each source) from the environment.
@@ -16,5 +30,4 @@ defmodule Processor.Application do
     Application.fetch_env!(:processor, :source)
     |> Enum.map(fn x -> {Processor, x} end)
   end
-
 end
