@@ -6,8 +6,6 @@ defmodule Processor.Application do
   @impl true
   def start(_type, _args) do
     opts = [strategy: :one_for_one, name: Processor.Supervisor]
-    # children = read_children()
-    # children |> Supervisor.start_link(opts)
     children = [
       %{
         id: Git,
@@ -20,9 +18,9 @@ defmodule Processor.Application do
     ]
 
     Supervisor.start_link(children, opts)
-    # Supervisor.start_link([{Processor, "github"}, {Processor, "trello"}], opts)
   end
 
+  # TODO: Fix
   # Reads the children that must be spawned (to read from each source) from the environment.
   # Returns a list with tuples of {Processor, source} for each source read.
   @spec read_children :: [{atom(), String.t()}]

@@ -1,6 +1,0 @@
-2021-07-21 16:09:30.993 [error] emulator Error in process <0.255.0> with exit value:
-{{badmatch,[<<"github.asd">>]},[{'Elixir.Extractor',loop,0,[{file,"lib/extractor.ex"},{line,3}]}]}
-2021-07-22 11:58:47.712 [error] <0.286.0> ERROR: Could not find 'wxe_driver.so' in: /usr/lib/erlang/lib/wx-2.0/priv
-2021-07-22 11:58:47.714 [error] <0.286.0> CRASH REPORT Process <0.286.0> with 0 neighbours crashed with reason: {load_driver,"No driver found"} in wxe_util:priv_dir/2 line 183
-2021-07-22 11:58:47.715 [error] <0.284.0> CRASH REPORT Process observer with 0 neighbours exited with reason: {load_driver,"No driver found"} in wxe_server:start/1 line 65 in wx_object:init_it/6 line 417
-2021-07-22 11:58:47.715 [error] <0.285.0> CRASH REPORT Process <0.285.0> with 0 neighbours crashed with reason: {load_driver,"No driver found"} in wxe_util:priv_dir/2 line 183
