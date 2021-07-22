@@ -14,7 +14,6 @@ defmodule Connector do
   Convenience method for startup.
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
-
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], [{:name, __MODULE__}])
   end
@@ -24,32 +23,30 @@ defmodule Connector do
   """
   @impl true
   def init([]) do
-    pid = spawn(fn -> Extractor.loop  end)
+    {:ok, _pid} = Task.Supervisor.start_child(Connector.TaskSupervisor, fn -> Extractor.loop end, restart: :permanent)
     {connection, channel} = start_connection()
-    #IO.puts "PID: #{inspect(pid)}"
-    {:ok,{connection, channel, pid}}
+    {:ok,{connection, channel}}
   end
 
   @doc """
   A send request, expects a source and a message.
   """
   @impl true
-  def handle_call({:send, source, message}, _from, {_connection, channel, _pid} = state) do
+  def handle_call({:send, source, message}, _from, {_connection, channel} = state) do
     routing = "insert.raw." <> source
     send(routing, message, channel)
     {:reply, state, state}
   end
 
   @doc """
-  A pid request.
+  Closes the connection with RabbitMQ on exit.
   """
   @impl true
-  def handle_call(:pid, _from, {_connection, _channel, pid} = state) do
-    {:reply, pid, state}
+  def terminate(_reason, {connection, _channel}) do
+    close_connection(connection)
   end
 
   # Start a connection with RabbitMQ and declare an exchange.
-
   defp start_connection do
     {:ok, connection} = AMQP.Connection.open
     {:ok, channel} = AMQP.Channel.open(connection)
@@ -59,7 +56,6 @@ defmodule Connector do
 
   # Publishes a message to an Exchange.
   @spec send(String.t, String.t, AMQP.Channel.t()) :: :ok
-
   defp send(topic, message, channel) do
     AMQP.Basic.publish(channel, "dharma", topic, message, persistent: true)
     IO.puts " [x] Sent '[#{topic}] #{message}'"
