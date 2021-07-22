@@ -35,7 +35,7 @@ defmodule Processor do
     create_queue(channel, "raw_input", ["insert.raw." <> source])
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
     create_queue(channel, "process_blockchain", ["insert.processed.dharma", "insert.processed.other"])
-    AMQP.Basic.consume(channel, "raw_input", nil, no_ack: true)
+    AMQP.Basic.consume(channel, "raw_input", nil)
 
     wait_for_messages(channel)
   end
@@ -43,7 +43,7 @@ defmodule Processor do
   # Creates a queue named `queue_name` that's binded to each topic in the list.
   @spec create_queue(AMQP.Channel.t(), String.t(), [String.t()]) :: :ok
   defp create_queue(channel, queue_name, topic) do
-    AMQP.Queue.declare(channel, queue_name , exclusive: true)
+    AMQP.Queue.declare(channel, queue_name , [durable: true, exclusive: true])
     Enum.each(topic, fn x ->
       AMQP.Queue.bind(channel, queue_name, "dharma", routing_key: x)
     end)
@@ -59,7 +59,7 @@ defmodule Processor do
   # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.
   @spec send(String.t(), any, AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
-    AMQP.Basic.publish(channel, "dharma", topic, message)
+    AMQP.Basic.publish(channel, "dharma", topic, message, persistent: true)
     IO.puts " [x] Sent '[#{topic}] #{message}'"
   end
 
@@ -70,6 +70,7 @@ defmodule Processor do
         IO.puts " [x] Received [#{meta.routing_key}] #{payload}"
         msg_processed = process(payload)
         send("insert.processed.*", msg_processed, channel)
+        AMQP.Basic.ack(channel, meta.delivery_tag)
         wait_for_messages(channel)
     end
   end

@@ -61,7 +61,7 @@ defmodule Connector do
   @spec send(String.t, String.t, AMQP.Channel.t()) :: :ok
 
   defp send(topic, message, channel) do
-    AMQP.Basic.publish(channel, "dharma", topic, message)
+    AMQP.Basic.publish(channel, "dharma", topic, message, persistent: true)
     IO.puts " [x] Sent '[#{topic}] #{message}'"
   end
 
