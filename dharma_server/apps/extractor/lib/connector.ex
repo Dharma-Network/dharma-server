@@ -14,51 +14,64 @@ defmodule Connector do
   Convenience method for startup.
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(_opts) do
-    GenServer.start_link(__MODULE__, [], [{:name, __MODULE__}])
+  def start_link(name) do
+    server_name = String.to_atom(name)
+    GenServer.start_link(__MODULE__, %{server_name: server_name}, [{:name, server_name}])
   end
 
   @doc """
   Callbacks for GenServer.Behaviour.
   """
   @impl true
-  def init([]) do
-    {:ok, _pid} = Task.Supervisor.start_child(Connector.TaskSupervisor, fn -> Extractor.loop end, restart: :permanent)
-    {connection, channel} = start_connection()
-    {:ok,{connection, channel}}
+  def init(state) do
+    new_state = start_connection(state)
+    GenServer.cast(new_state.server_name, :start)
+    {:ok, new_state}
+  end
+
+  @impl true
+  def handle_cast(:start, state) do
+    GenServer.cast(
+      state.server_name,
+      {:send, state.server_name, Atom.to_string(state.server_name)}
+    )
+
+    :timer.sleep(2000)
+    GenServer.cast(state.server_name, :start)
+    {:noreply, state}
   end
 
   @doc """
   A send request, expects a source and a message.
   """
   @impl true
-  def handle_call({:send, source, message}, _from, {_connection, channel} = state) do
-    routing = "insert.raw." <> source
-    send(routing, message, channel)
-    {:reply, state, state}
+  def handle_cast({:send, source, message}, state) do
+    routing = "insert.raw." <> Atom.to_string(source)
+    send(routing, message, state.channel)
+    {:noreply, state}
   end
 
   @doc """
   Closes the connection with RabbitMQ on exit.
   """
   @impl true
-  def terminate(_reason, {connection, _channel}) do
-    close_connection(connection)
+  def terminate(_reason, state) do
+    close_connection(state.connection)
   end
 
   # Start a connection with RabbitMQ and declare an exchange.
-  defp start_connection do
-    {:ok, connection} = AMQP.Connection.open
+  defp start_connection(state) do
+    {:ok, connection} = AMQP.Connection.open()
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, "dharma", :topic)
-    {connection, channel}
+    Map.merge(state, %{connection: connection, channel: channel})
   end
 
   # Publishes a message to an Exchange.
-  @spec send(String.t, String.t, AMQP.Channel.t()) :: :ok
+  @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
     AMQP.Basic.publish(channel, "dharma", topic, message, persistent: true)
-    IO.puts " [x] Sent '[#{topic}] #{message}'"
+    IO.puts(" [x] Sent '[#{topic}] #{message}'")
   end
 
   # Close RabbitMQ connection.
@@ -66,5 +79,4 @@ defmodule Connector do
   defp close_connection(connection) do
     AMQP.Connection.close(connection)
   end
-
 end
