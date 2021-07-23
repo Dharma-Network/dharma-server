@@ -7,9 +7,8 @@ defmodule Extractor.Application do
   def start(_type, _args) do
     opts = [strategy: :one_for_one, name: Extractor.Supervisor]
 
-    children = read_children()
-    IO.puts("Children >>> " <> inspect(children))
-    Supervisor.start_link(children, opts)
+    read_children()
+    |> Supervisor.start_link(opts)
   end
 
   # Reads the children that must be spawned (to read from each source) from the environment.

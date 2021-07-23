@@ -15,7 +15,6 @@ defmodule Connector do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(name) do
-    IO.puts("ADS >>> " <> inspect(name))
     server_name = String.to_atom(name)
     GenServer.start_link(__MODULE__, %{server_name: server_name}, [{:name, server_name}])
   end
@@ -62,7 +61,8 @@ defmodule Connector do
 
   # Start a connection with RabbitMQ and declare an exchange.
   defp start_connection(state) do
-    {:ok, connection} = AMQP.Connection.open()
+    url = Application.fetch_env!(:rabbit, :url)
+    {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, "dharma", :topic)
     Map.merge(state, %{connection: connection, channel: channel})

@@ -22,22 +22,21 @@ defmodule Processor do
   # Creates the connection and the queues that will be used in the life cycle of this process.
   # After that, goes into a state where the process waits for messages.
   defp start_connection(state) do
-    {:ok, connection} = AMQP.Connection.open()
+    url = Application.fetch_env!(:rabbit, :url)
+    {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, "dharma", :topic)
     create_queue(channel, "raw_input", ["insert.raw." <> state.source])
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
-
     create_queue(channel, "process_blockchain", [
       "insert.processed.dharma",
       "insert.processed.other"
     ])
 
-    # AMQP.Basic.consume(channel, "raw_input", self(), no_ack: true)
     new_state = Map.put(state, :channel, channel)
 
     AMQP.Queue.subscribe(channel, "raw_input", fn payload, meta ->
-      func(payload, meta, new_state)
+      process_and_send(payload, meta, new_state)
     end)
 
     new_state
@@ -53,6 +52,14 @@ defmodule Processor do
     end)
   end
 
+  # Process the payload and send it to the correct topic.
+  defp process_and_send(payload, meta, state) do
+    IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
+    msg_processed = process(payload)
+    # TODO: Dynamically select topics?
+    send("insert.processed.dharma", msg_processed, state.channel)
+  end
+
   # Processes the `message`, preparing it to be inserted in the processed queues.
   # Identity for now, will change later on!
   @spec process(any) :: any
@@ -66,22 +73,6 @@ defmodule Processor do
     AMQP.Basic.publish(channel, "dharma", topic, message)
     IO.puts(" [x] Sent '[#{topic}] #{message}'")
   end
-
-  def func(payload, meta, state) do
-    IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
-    msg_processed = process(payload)
-    send("insert.processed.*", msg_processed, state.channel)
-  end
-
-  # A loop that waits for messages in a `channel`, processes them and re-delivers them to the processed topic.
-
-  # @impl true
-  # def handle_cast({:basic_deliver, payload, meta}, state) do
-  #   IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
-  #   msg_processed = process(payload)
-  #   send("insert.processed.*", msg_processed, state.channel)
-  #   {:noreply, state}
-  # end
 
   @impl true
   def handle_info({:basic_deliver, payload, meta}, state) do

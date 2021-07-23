@@ -7,3 +7,7 @@ config :processor,
 config :extractor,
        :source,
        ["github", "trello"]
+
+config :rabbit,
+       :url,
+       "amqp://guest:guest@localhost"
