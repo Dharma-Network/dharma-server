@@ -1,26 +1,27 @@
 defmodule Extractor.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
 
   @impl true
   def start(_type, _args) do
-    children = [
-      %{
-        id: Github,
-        start: {Connector, :start_link, ["github"]}
-      },
-      %{
-        id: Trello,
-        start: {Connector, :start_link, ["trello"]}
-      }
-    ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Extractor.Supervisor]
+
+    children = read_children()
+    IO.puts("Children >>> " <> inspect(children))
     Supervisor.start_link(children, opts)
+  end
+
+  # Reads the children that must be spawned (to read from each source) from the environment.
+  # Returns a list with tuples of {Processor, source} for each source read.
+  @spec read_children :: [{atom(), String.t()}]
+  defp read_children do
+    Application.fetch_env!(:extractor, :source)
+    |> Enum.map(fn x ->
+      %{
+        id: x,
+        start: {Connector, :start_link, [x]}
+      }
+    end)
   end
 end

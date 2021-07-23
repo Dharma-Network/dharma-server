@@ -15,6 +15,7 @@ defmodule Connector do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(name) do
+    IO.puts("ADS >>> " <> inspect(name))
     server_name = String.to_atom(name)
     GenServer.start_link(__MODULE__, %{server_name: server_name}, [{:name, server_name}])
   end
