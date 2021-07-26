@@ -1,5 +1,8 @@
-defmodule Processor do
+defmodule Loader do
   use GenServer
+  use Tesla
+
+  adapter(Tesla.Adapter.Finch, name: MyFinch)
 
   @moduledoc """
   A `Processor` handles info regarding one source of input.
@@ -9,8 +12,8 @@ defmodule Processor do
   @doc """
   Starts a connection to handle one input source named `name`.
   """
-  def start_link(name) do
-    GenServer.start_link(__MODULE__, %{source: name}, [{:name, String.to_atom(name)}])
+  def start_link(client) do
+    GenServer.start_link(__MODULE__, %{client: client}, [{:name, __MODULE__}])
   end
 
   @impl true
@@ -26,7 +29,7 @@ defmodule Processor do
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, "dharma", :topic)
-    create_queue(channel, "raw_input", ["insert.raw." <> state.source])
+
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
 
     create_queue(channel, "process_blockchain", [
@@ -36,8 +39,12 @@ defmodule Processor do
 
     new_state = Map.put(state, :channel, channel)
 
-    AMQP.Queue.subscribe(channel, "raw_input", fn payload, meta ->
-      process_and_send(payload, meta, new_state)
+    AMQP.Queue.subscribe(channel, "process_dashboard", fn payload, meta ->
+      send_data_couch(payload, meta, new_state)
+    end)
+
+    AMQP.Queue.subscribe(channel, "process_blockchain", fn payload, meta ->
+      send_data_blockchain(payload, meta, new_state)
     end)
 
     new_state
@@ -54,25 +61,16 @@ defmodule Processor do
   end
 
   # Process the payload and send it to the correct topic.
-  defp process_and_send(payload, meta, state) do
+  # TODO: Don't rely on couchdb UUID
+  defp send_data_couch(payload, meta, state) do
     IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
-    msg_processed = process(payload)
-    # TODO: Dynamically select topics?
-    send("insert.processed.dharma", msg_processed, state.channel)
+    body = %{"topic" => meta.routing_key, "payload" => payload}
+    res = post(state.client, "/dashboard", body)
+    IO.inspect(res)
   end
 
-  # Processes the `message`, preparing it to be inserted in the processed queues.
-  # Identity for now, will change later on!
-  @spec process(any) :: any
-  defp process(message) do
-    message
-  end
-
-  # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.
-  @spec send(String.t(), any, AMQP.Channel.t()) :: :ok
-  defp send(topic, message, channel) do
-    AMQP.Basic.publish(channel, "dharma", topic, message)
-    IO.puts(" [x] Sent '[#{topic}] #{message}'")
+  defp send_data_blockchain(_payload, _meta, _state) do
+    :ok
   end
 
   @impl true
