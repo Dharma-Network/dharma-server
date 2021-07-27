@@ -14,7 +14,6 @@ defmodule Loader.Application do
     client = client()
     cookie = get_cookie(client)
     client = client(cookie)
-    create_db(client)
 
     children = [
       {Loader, client}
@@ -64,11 +63,5 @@ defmodule Loader.Application do
       |> Kernel.elem(1)
 
     cookie
-  end
-
-  defp create_db(client) do
-    db_name = "/dashboard"
-    {:ok, response} = put(client, db_name, %{})
-    response
   end
 end

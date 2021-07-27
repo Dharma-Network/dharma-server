@@ -9,6 +9,7 @@ defmodule Connector do
   @moduledoc since: "1.0.0"
 
   use GenServer
+  @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
 
   @doc """
   Convenience method for startup.
@@ -25,19 +26,23 @@ defmodule Connector do
   @impl true
   def init(state) do
     new_state = start_connection(state)
-    GenServer.cast(new_state.server_name, :start)
+    simulate_external_message(new_state)
     {:ok, new_state}
   end
 
+  defp simulate_external_message(state) do
+    GenServer.cast(state.server_name, :send)
+  end
+
   @impl true
-  def handle_cast(:start, state) do
+  def handle_cast(:send, state) do
     GenServer.cast(
       state.server_name,
       {:send, state.server_name, Atom.to_string(state.server_name)}
     )
 
     :timer.sleep(2000)
-    GenServer.cast(state.server_name, :start)
+    GenServer.cast(state.server_name, :send)
     {:noreply, state}
   end
 
@@ -61,18 +66,18 @@ defmodule Connector do
 
   # Start a connection with RabbitMQ and declare an exchange.
   defp start_connection(state) do
-    url = Application.fetch_env!(:rabbit, :url)
+    url = Application.fetch_env!(:extractor, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
-    AMQP.Exchange.declare(channel, "dharma", :topic)
+    AMQP.Exchange.declare(channel, @dharma_exchange, :topic)
     Map.merge(state, %{connection: connection, channel: channel})
   end
 
   # Publishes a message to an Exchange.
   @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
-    AMQP.Basic.publish(channel, "dharma", topic, message, persistent: true)
-    IO.puts(" [x] Sent '[#{topic}] #{message}'")
+    AMQP.Basic.publish(channel, @dharma_exchange, topic, message, persistent: true)
+    IO.inspect("[#{topic}] #{message}", label: "[x] Sent")
   end
 
   # Close RabbitMQ connection.

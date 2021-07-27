@@ -21,7 +21,7 @@ defmodule Extractor.MixProject do
       extra_applications: [:logger],
       mod: {Extractor.Application, []},
       applications: [:amqp],
-      env: [source: []]
+      env: [source: [], rabbit_url: [], rabbit_exchange: []]
     ]
   end
 
@@ -29,9 +29,6 @@ defmodule Extractor.MixProject do
   defp deps do
     [
       {:amqp, "~> 1.0"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
-      # {:sibling_app_in_umbrella, in_umbrella: true}
     ]
   end
 end
