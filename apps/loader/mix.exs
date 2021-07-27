@@ -21,7 +21,7 @@ defmodule Loader.MixProject do
       extra_applications: [:logger],
       applications: [:amqp, :tesla, :jason, :finch],
       mod: {Loader.Application, []},
-      env: [url: [], user_db: [], password_db: [], rabbit_url: [], rabbit_exchange: []]
+      env: [url: [], user_db: [], password_db: []]
     ]
   end
 
