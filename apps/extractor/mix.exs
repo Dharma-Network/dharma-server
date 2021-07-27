@@ -21,7 +21,7 @@ defmodule Extractor.MixProject do
       extra_applications: [:logger],
       mod: {Extractor.Application, []},
       applications: [:amqp],
-      env: [source: [], rabbit_url: [], rabbit_exchange: []]
+      env: [source: []]
     ]
   end
 
