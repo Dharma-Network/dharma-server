@@ -21,7 +21,7 @@ defmodule Processor.MixProject do
       applications: [:amqp],
       extra_applications: [:logger],
       mod: {Processor.Application, []},
-      env: [source: [], rabbit_url: [], rabbit_exchange: []]
+      env: [source: []]
     ]
   end
 
