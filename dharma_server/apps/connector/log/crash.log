@@ -1,3 +1,0 @@
-2021-07-21 16:09:30 =ERROR REPORT====
-Error in process <0.255.0> with exit value:
-{{badmatch,[<<"github.asd">>]},[{'Elixir.Extractor',loop,0,[{file,"lib/extractor.ex"},{line,3}]}]}

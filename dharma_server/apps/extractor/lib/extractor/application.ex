@@ -1,11 +1,11 @@
-defmodule Processor.Application do
+defmodule Extractor.Application do
   @moduledoc false
 
   use Application
 
   @impl true
   def start(_type, _args) do
-    opts = [strategy: :one_for_one, name: Processor.Supervisor]
+    opts = [strategy: :one_for_one, name: Extractor.Supervisor]
 
     read_children()
     |> Supervisor.start_link(opts)
@@ -15,11 +15,11 @@ defmodule Processor.Application do
   # Returns a list with tuples of {Processor, source} for each source read.
   @spec read_children :: [{atom(), String.t()}]
   defp read_children do
-    Application.fetch_env!(:processor, :source)
+    Application.fetch_env!(:extractor, :source)
     |> Enum.map(fn x ->
       %{
         id: x,
-        start: {Processor, :start_link, [x]}
+        start: {Connector, :start_link, [x]}
       }
     end)
   end

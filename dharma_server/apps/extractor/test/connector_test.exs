@@ -1,24 +1,26 @@
-defmodule ProcessorTest do
+defmodule ConnectorTest do
   use ExUnit.Case
-  doctest Processor
+  doctest Connector
 
-  test "Kill a processor to see if it comes back to life" do
-    info = Supervisor.which_children(Processor.Supervisor)
+  test "if connector and the connector task supervisor dies, it gets relaunched" do
+    # Obtain the initial info about children
+    info = Supervisor.which_children(Extractor.Supervisor)
+    IO.inspect info
 
     # Kill every single process
-    Supervisor.which_children(Processor.Supervisor)
+    Supervisor.which_children(Extractor.Supervisor)
     |> Enum.each(fn x -> Process.exit(elem(x, 1), :kill) end)
 
     # Wait a bit to let the restarts happen and get the new info about the children
     :timer.sleep(100)
-    new_info = Supervisor.which_children(Processor.Supervisor)
+    new_info = Supervisor.which_children(Extractor.Supervisor)
+    IO.inspect new_info
 
     # Get the sets with pids for each info list
-    get_pids = fn l -> Enum.map(l, fn x -> elem(x, 1) end) end
+    get_pids = fn l -> Enum.map(l, fn x -> elem(x,1) end) end
     initial_pids = MapSet.new(get_pids.(info))
     final_pids = MapSet.new(get_pids.(new_info))
 
-    # Check if there's the same amount of children with no matching pids
     assert length(info) == length(new_info) && MapSet.disjoint?(initial_pids, final_pids)
   end
 end

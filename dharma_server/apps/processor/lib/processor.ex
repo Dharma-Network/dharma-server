@@ -1,4 +1,6 @@
 defmodule Processor do
+  use GenServer
+
   @moduledoc """
   A `Processor` handles info regarding one source of input.
   It reads data from a queue, processes that same data and forwards it to processed queues.
@@ -8,45 +10,54 @@ defmodule Processor do
   Starts a connection to handle one input source named `name`.
   """
   def start_link(name) do
-    start_connection(name)
+    GenServer.start_link(__MODULE__, %{source: name}, [{:name, String.to_atom(name)}])
   end
 
-  @doc """
-  Used by the supervisor to spawn this process.
-  We opted to use as `id` the source from which data will be read.
-  """
-  @spec child_spec(String.t()) :: map()
-  def child_spec(opts) do
-    %{
-      id: String.to_atom(opts),
-      start: {__MODULE__, :start_link, [opts]},
-      type: :worker,
-      restart: :permanent,
-      shutdown: 500
-    }
+  @impl true
+  def init(state) do
+    new_state = start_connection(state)
+    {:ok, new_state}
   end
 
   # Creates the connection and the queues that will be used in the life cycle of this process.
   # After that, goes into a state where the process waits for messages.
-  defp start_connection(source) do
-    {:ok, connection} = AMQP.Connection.open
+  defp start_connection(state) do
+    url = Application.fetch_env!(:rabbit, :url)
+    {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, "dharma", :topic)
-    create_queue(channel, "raw_input", ["insert.raw." <> source])
+    create_queue(channel, "raw_input", ["insert.raw." <> state.source])
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
-    create_queue(channel, "process_blockchain", ["insert.processed.dharma", "insert.processed.other"])
-    AMQP.Basic.consume(channel, "raw_input", nil, no_ack: true)
+    create_queue(channel, "process_blockchain", [
+      "insert.processed.dharma",
+      "insert.processed.other"
+    ])
 
-    wait_for_messages(channel)
+    new_state = Map.put(state, :channel, channel)
+
+    AMQP.Queue.subscribe(channel, "raw_input", fn payload, meta ->
+      process_and_send(payload, meta, new_state)
+    end)
+
+    new_state
   end
 
   # Creates a queue named `queue_name` that's binded to each topic in the list.
   @spec create_queue(AMQP.Channel.t(), String.t(), [String.t()]) :: :ok
   defp create_queue(channel, queue_name, topic) do
-    AMQP.Queue.declare(channel, queue_name , exclusive: true)
+    AMQP.Queue.declare(channel, queue_name, exclusive: false, durable: true)
+
     Enum.each(topic, fn x ->
       AMQP.Queue.bind(channel, queue_name, "dharma", routing_key: x)
     end)
+  end
+
+  # Process the payload and send it to the correct topic.
+  defp process_and_send(payload, meta, state) do
+    IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
+    msg_processed = process(payload)
+    # TODO: Dynamically select topics?
+    send("insert.processed.dharma", msg_processed, state.channel)
   end
 
   # Processes the `message`, preparing it to be inserted in the processed queues.
@@ -60,18 +71,20 @@ defmodule Processor do
   @spec send(String.t(), any, AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
     AMQP.Basic.publish(channel, "dharma", topic, message)
-    IO.puts " [x] Sent '[#{topic}] #{message}'"
+    IO.puts(" [x] Sent '[#{topic}] #{message}'")
   end
 
-  # A loop that waits for messages in a `channel`, processes them and re-delivers them to the processed topic.
-  defp wait_for_messages(channel) do
-    receive do
-      {:basic_deliver, payload, meta} ->
-        IO.puts " [x] Received [#{meta.routing_key}] #{payload}"
-        msg_processed = process(payload)
-        send("insert.processed.*", msg_processed, channel)
-        wait_for_messages(channel)
-    end
+  @impl true
+  def handle_info({:basic_deliver, payload, meta}, state) do
+    IO.puts(" [x] Received [#{meta.routing_key}] #{payload}")
+    msg_processed = process(payload)
+    send("insert.processed.*", msg_processed, state.channel)
+    AMQP.Basic.ack(state.channel, meta.delivery_tag)
+    {:noreply, state}
   end
 
+  @impl true
+  def handle_info(_, state) do
+    {:noreply, state}
+  end
 end
