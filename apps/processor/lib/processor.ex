@@ -47,10 +47,10 @@ defmodule Processor do
 
   # Creates a queue named `queue_name` that's binded to each topic in the list.
   @spec create_queue(AMQP.Channel.t(), String.t(), [String.t()]) :: :ok
-  defp create_queue(channel, queue_name, topic) do
+  defp create_queue(channel, queue_name, topics) do
     AMQP.Queue.declare(channel, queue_name, exclusive: false, durable: true)
 
-    Enum.each(topic, fn x ->
+    Enum.each(topics, fn x ->
       AMQP.Queue.bind(channel, queue_name, @dharma_exchange, routing_key: x)
     end)
   end

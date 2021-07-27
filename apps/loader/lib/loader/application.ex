@@ -58,10 +58,6 @@ defmodule Loader.Application do
     body = %{"name" => user_name, "password" => user_password}
     {:ok, response} = post(client, "_session", body)
 
-    cookie =
-      hd(Enum.take(response.headers, -1))
-      |> Kernel.elem(1)
-
-    cookie
+    Tesla.get_header(response, "set-cookie")
   end
 end
