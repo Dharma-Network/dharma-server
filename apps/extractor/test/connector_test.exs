@@ -5,7 +5,6 @@ defmodule ConnectorTest do
   test "if connector and the connector task supervisor dies, it gets relaunched" do
     # Obtain the initial info about children
     info = Supervisor.which_children(Extractor.Supervisor)
-    IO.inspect info
 
     # Kill every single process
     Supervisor.which_children(Extractor.Supervisor)
@@ -14,10 +13,9 @@ defmodule ConnectorTest do
     # Wait a bit to let the restarts happen and get the new info about the children
     :timer.sleep(100)
     new_info = Supervisor.which_children(Extractor.Supervisor)
-    IO.inspect new_info
 
     # Get the sets with pids for each info list
-    get_pids = fn l -> Enum.map(l, fn x -> elem(x,1) end) end
+    get_pids = fn l -> Enum.map(l, fn x -> elem(x, 1) end) end
     initial_pids = MapSet.new(get_pids.(info))
     final_pids = MapSet.new(get_pids.(new_info))
 

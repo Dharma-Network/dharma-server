@@ -1,0 +1,6 @@
+export RABBIT_URL="amqp://user:password@hostname"
+export RABBIT_EXCHANGE="exchange_name"
+export COUCHDB_URL="couchdb_url"
+export COUCHDB_USER="couchdb_user"
+export COUCHDB_PASSWORD="couchdb_password"
+export COUCHDB_NAME="database_name"

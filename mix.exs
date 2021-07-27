@@ -17,6 +17,7 @@ defmodule DharmaServer.MixProject do
   # Run "mix help deps" for examples and options.
   defp deps do
     [
+      {:amqp, "~> 1.0"}
     ]
   end
 end

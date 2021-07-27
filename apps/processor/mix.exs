@@ -1,9 +1,9 @@
-defmodule Extractor.MixProject do
+defmodule Processor.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :extractor,
+      app: :processor,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -18,9 +18,9 @@ defmodule Extractor.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-      mod: {Extractor.Application, []},
       applications: [:amqp],
+      extra_applications: [:logger],
+      mod: {Processor.Application, []},
       env: [source: []]
     ]
   end
