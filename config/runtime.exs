@@ -4,7 +4,8 @@ config :processor,
   source: ["github", "trello"]
 
 config :extractor,
-  source: ["github", "trello"]
+  source: ["trello"],
+  github_token: System.fetch_env!("GITHUB_TOKEN")
 
 config :loader,
   url: System.fetch_env!("COUCHDB_URL"),

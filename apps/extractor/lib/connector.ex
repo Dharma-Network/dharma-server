@@ -26,8 +26,55 @@ defmodule Connector do
   @impl true
   def init(state) do
     new_state = start_connection(state)
-    simulate_external_message(new_state)
+    #simulate_external_message(new_state)
+    d1 = ~U[2020-06-27 13:21:50Z]
+    d2 = ~U[2022-08-27 13:21:50Z]
+    user = "PedroSilva9"
+    fetch_pulls(user, {d1, d2})
     {:ok, new_state}
+  end
+
+  # Fetches pulls from a user in a timewindow
+  defp fetch_pulls(user, tw) do
+    owner = "Dharma-Network"
+    repo = "dharma-server"
+    filters = %{state: "closed"}
+    github_token = Application.get_env(:extractor, :github_token)
+    client = Tentacat.Client.new(%{access_token: github_token})
+    # Set a extra header to contain the etag header
+    # TODO: Understand why this fails despite working on cmd
+    #Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "92b6cbeda07e5faaebb4b58bc30425f994661c54a1bf23e2af1f548f936b3651"}])
+
+    {_status, pulls, resp} = Tentacat.Pulls.filter(client, owner, repo, filters)
+    # Probably should be cached somewhere to be included in requests later
+    _etag = retrieve_etag(resp) |> IO.inspect(label: "ETAG: ")
+    pulls
+    |> Enum.filter(fn pull ->
+      validate_pull(pull, user, tw, client, owner, repo)
+    end)
+    |> length |> IO.inspect
+  end
+
+  # Retrieves the ETag from a response, will be needed when we implement conditional requests
+  defp retrieve_etag(resp) do
+    Enum.filter(resp.headers, &match?({"ETag", _}, &1)) |> hd
+  end
+
+  # Center validation in a function
+  defp validate_pull(pull, user, {from, to}, client, owner, repo) do
+    {:ok, dt, 0} = DateTime.from_iso8601(pull["created_at"])
+    merged_info = Tentacat.Pulls.has_been_merged(client, owner, repo, pull["number"])
+
+    # Matching user
+    pull["user"]["login"] == user &&
+    # Between the accepted time window
+    is_between?(dt, from, to) &&
+    # Confirms that it was merged (not including closed PR's this way)
+    match?({204, _, _}, merged_info)
+  end
+
+  defp is_between?(current, from, to) do
+    DateTime.compare(current,from) == :gt && DateTime.compare(current, to) == :lt
   end
 
   defp simulate_external_message(state) do
