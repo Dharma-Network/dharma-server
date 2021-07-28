@@ -30,34 +30,43 @@ defmodule Connector do
     d1 = ~U[2020-06-27 13:21:50Z]
     d2 = ~U[2022-08-27 13:21:50Z]
     user = "PedroSilva9"
-    fetch_pulls(user, {d1, d2})
+    {valid, etag} = fetch_pulls(user, {d1, d2})
+    IO.inspect (length(valid))
+    new_state = Map.put(new_state, :etag, etag)
+    :yay = fetch_pulls(user, {d1, d2}, etag)
     {:ok, new_state}
   end
 
   # Fetches pulls from a user in a timewindow
-  defp fetch_pulls(user, tw) do
+  defp fetch_pulls(user, tw, etag \\ "") do
     owner = "Dharma-Network"
     repo = "dharma-server"
     filters = %{state: "closed"}
     github_token = Application.get_env(:extractor, :github_token)
     client = Tentacat.Client.new(%{access_token: github_token})
-    # Set a extra header to contain the etag header
-    # TODO: Understand why this fails despite working on cmd
-    #Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "92b6cbeda07e5faaebb4b58bc30425f994661c54a1bf23e2af1f548f936b3651"}])
-
-    {_status, pulls, resp} = Tentacat.Pulls.filter(client, owner, repo, filters)
-    # Probably should be cached somewhere to be included in requests later
-    _etag = retrieve_etag(resp) |> IO.inspect(label: "ETAG: ")
-    pulls
-    |> Enum.filter(fn pull ->
-      validate_pull(pull, user, tw, client, owner, repo)
-    end)
-    |> length |> IO.inspect
+    # Set a extra header to contain the etag header (only if it's not empty)
+    #Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "\"#{etag}\""}])
+    Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
+    case Tentacat.Pulls.filter(client, owner, repo, filters) do
+      # Success case
+        {200, pulls, resp} ->
+          etag = retrieve_etag(resp)
+          valid = Enum.filter(pulls, fn pull ->
+            validate_pull(pull, user, tw, client, owner, repo)
+          end)
+        {valid, etag}
+      # Etag used succesfully
+        {304, nil, _resp} ->
+          :yay
+      end
   end
 
   # Retrieves the ETag from a response, will be needed when we implement conditional requests
   defp retrieve_etag(resp) do
-    Enum.filter(resp.headers, &match?({"ETag", _}, &1)) |> hd
+    resp.headers
+    |> Enum.filter(&match?({"ETag", _}, &1))
+    |> hd
+    |> elem(1)
   end
 
   # Center validation in a function
