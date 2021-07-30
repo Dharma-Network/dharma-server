@@ -4,8 +4,9 @@ config :processor,
   source: ["github", "trello"]
 
 config :extractor,
-  source: ["trello"],
-  github_token: System.fetch_env!("GITHUB_TOKEN")
+  source: ["github", "trello"],
+  github_token: System.fetch_env!("GITHUB_TOKEN"),
+  default_extract_rate: 1
 
 config :loader,
   url: System.fetch_env!("COUCHDB_URL"),

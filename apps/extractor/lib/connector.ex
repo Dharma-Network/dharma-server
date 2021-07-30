@@ -10,14 +10,30 @@ defmodule Connector do
 
   use GenServer
   @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
+  @owner "Dharma-Network"
+  @repo "dharma-server"
 
   @doc """
   Convenience method for startup.
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(name) do
-    server_name = String.to_atom(name)
-    GenServer.start_link(__MODULE__, %{server_name: server_name}, [{:name, server_name}])
+    GenServer.start_link(__MODULE__, %{source: name, etag: ""}, [
+      {:name, String.to_atom("#{__MODULE__}.#{name}")}
+    ])
+  end
+
+  # Fetch pull time.
+  defp pull_time(name) do
+    rate = String.downcase(name) <> "_extract_rate"
+
+    {:ok, time} =
+      case Application.fetch_env(:extractor, String.to_atom(rate)) do
+        :error -> Application.fetch_env(:extractor, :default_extract_rate)
+        pt -> pt
+      end
+
+    time * 60 * 1000
   end
 
   @doc """
@@ -26,42 +42,73 @@ defmodule Connector do
   @impl true
   def init(state) do
     new_state = start_connection(state)
-    #simulate_external_message(new_state)
-    d1 = ~U[2020-06-27 13:21:50Z]
-    d2 = ~U[2022-08-27 13:21:50Z]
-    user = "PedroSilva9"
-    {valid, etag} = fetch_pulls(user, {d1, d2})
-    IO.inspect (length(valid))
-    new_state = Map.put(new_state, :etag, etag)
-    :yay = fetch_pulls(user, {d1, d2}, etag)
+    github_token = Application.get_env(:extractor, :github_token)
+    client = Tentacat.Client.new(%{access_token: github_token})
+    new_state = timer(Map.put(new_state, :client, client))
     {:ok, new_state}
   end
 
-  # Fetches pulls from a user in a timewindow
-  defp fetch_pulls(user, tw, etag \\ "") do
-    owner = "Dharma-Network"
-    repo = "dharma-server"
-    filters = %{state: "closed"}
-    github_token = Application.get_env(:extractor, :github_token)
-    client = Tentacat.Client.new(%{access_token: github_token})
+  # Fetches recent pulls.
+  defp fetch(state) do
     # Set a extra header to contain the etag header (only if it's not empty)
-    #Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "\"#{etag}\""}])
-    Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
-    case Tentacat.Pulls.filter(client, owner, repo, filters) do
-      # Success case
-        {200, pulls, resp} ->
-          etag = retrieve_etag(resp)
-          valid = Enum.filter(pulls, fn pull ->
-            validate_pull(pull, user, tw, client, owner, repo)
-          end)
-        {valid, etag}
-      # Etag used succesfully
-        {304, nil, _resp} ->
-          :yay
-      end
+    Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{state.etag}"}])
+
+    case efficient_pulling(state.client, @owner, @repo, state.date) do
+      {[], _resp} ->
+        nil
+
+      {pulls, resp} ->
+        etag = retrieve_etag(resp)
+
+        valid = Enum.filter(pulls, &is_merged?(&1, state.client))
+
+        new_state = Map.put(state, :etag, etag)
+
+        {new_state, valid}
+
+      nil ->
+        nil
+    end
   end
 
-  # Retrieves the ETag from a response, will be needed when we implement conditional requests
+  # Obtain pulls sorted by most recent closed order.
+  # We use take_while to avoid going through any pull that's before from.
+  defp efficient_pulling(client, owner, repo, from) do
+    filters = %{state: "closed", sort: "updated", direction: "desc"}
+
+    case Tentacat.Pulls.filter(client, owner, repo, filters) do
+      # Regular response from github api
+      {200, pulls, resp} ->
+        value =
+          pulls
+          |> Enum.take_while(fn pull ->
+            {:ok, dt} = NaiveDateTime.from_iso8601(pull["closed_at"])
+            valid_time?(dt, from)
+          end)
+
+        {value, resp}
+
+      # Etag used successfully
+      {304, nil, _resp} ->
+        nil
+    end
+  end
+
+  # Checks if a datetime is after the provided one.
+  defp valid_time?(dt, from) do
+    NaiveDateTime.compare(dt, from) == :gt
+  end
+
+  # Filters relevant data from a pull request.
+  def extract_relevant_data(pull, client) do
+    {_status, files, _resp} = Tentacat.Pulls.Files.list(client, @owner, @repo, pull["number"])
+
+    Enum.map(files, fn file ->
+      %{filename: file["filename"], additions: file["additions"], status: file["status"]}
+    end)
+  end
+
+  # Retrieves the ETag from a response, will be needed when we implement conditional requests.
   defp retrieve_etag(resp) do
     resp.headers
     |> Enum.filter(&match?({"ETag", _}, &1))
@@ -69,47 +116,41 @@ defmodule Connector do
     |> elem(1)
   end
 
-  # Center validation in a function
-  defp validate_pull(pull, user, {from, to}, client, owner, repo) do
-    {:ok, dt, 0} = DateTime.from_iso8601(pull["created_at"])
-    merged_info = Tentacat.Pulls.has_been_merged(client, owner, repo, pull["number"])
+  defp is_merged?(pull, client) do
+    merged_info = Tentacat.Pulls.has_been_merged(client, @owner, @repo, pull["number"])
 
-    # Matching user
-    pull["user"]["login"] == user &&
-    # Between the accepted time window
-    is_between?(dt, from, to) &&
     # Confirms that it was merged (not including closed PR's this way)
     match?({204, _, _}, merged_info)
   end
 
-  defp is_between?(current, from, to) do
-    DateTime.compare(current,from) == :gt && DateTime.compare(current, to) == :lt
-  end
-
-  defp simulate_external_message(state) do
-    GenServer.cast(state.server_name, :send)
-  end
-
-  @impl true
-  def handle_cast(:send, state) do
-    GenServer.cast(
-      state.server_name,
-      {:send, state.server_name, Atom.to_string(state.server_name)}
-    )
-
-    :timer.sleep(2000)
-    GenServer.cast(state.server_name, :send)
-    {:noreply, state}
-  end
-
   @doc """
-  A send request, expects a source and a message.
+  Fetch pulls every `EXTRACT_RATE` and send them to RabbitMQ queue. 
   """
   @impl true
-  def handle_cast({:send, source, message}, state) do
-    routing = "insert.raw." <> Atom.to_string(source)
-    send(routing, message, state.channel)
-    {:noreply, state}
+  def handle_info(:pull_data, state) do
+    new_state =
+      case fetch(state) do
+        {new_state, pulls} ->
+          pulls
+          |> Enum.map(fn x -> extract_relevant_data(x, state.client) end)
+          |> Jason.encode!()
+          |> send(state.source, state.channel)
+
+          new_state
+
+        nil ->
+          state
+      end
+
+    timer(new_state)
+    {:noreply, new_state}
+  end
+
+  # Update DateTime and schedule pull.
+  defp timer(state) do
+    date = NaiveDateTime.local_now()
+    Process.send_after(self(), :pull_data, pull_time(state.source))
+    Map.put(state, :date, date)
   end
 
   @doc """
@@ -131,7 +172,8 @@ defmodule Connector do
 
   # Publishes a message to an Exchange.
   @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
-  defp send(topic, message, channel) do
+  defp send(message, source, channel) do
+    topic = "insert.raw." <> source
     AMQP.Basic.publish(channel, @dharma_exchange, topic, message, persistent: true)
     IO.inspect("[#{topic}] #{message}", label: "[x] Sent")
   end

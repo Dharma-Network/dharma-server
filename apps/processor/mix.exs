@@ -19,8 +19,8 @@ defmodule Processor.MixProject do
   def application do
     [
       applications: [:amqp],
-      extra_applications: [:logger],
       mod: {Processor.Application, []},
+      extra_applications: [:lager, :logger, :amqp],
       env: [source: []]
     ]
   end

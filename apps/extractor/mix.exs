@@ -18,7 +18,7 @@ defmodule Extractor.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:lager, :logger, :amqp, :jason],
       mod: {Extractor.Application, []},
       applications: [:amqp, :tentacat],
       env: [source: []]
@@ -28,6 +28,7 @@ defmodule Extractor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:jason, "~> 1.2"},
       {:amqp, "~> 1.0"},
       {:tentacat, "~> 1.0"}
     ]

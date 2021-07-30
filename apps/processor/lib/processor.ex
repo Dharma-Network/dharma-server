@@ -12,7 +12,9 @@ defmodule Processor do
   Starts a connection to handle one input source named `name`.
   """
   def start_link(name) do
-    GenServer.start_link(__MODULE__, %{source: name}, [{:name, String.to_atom(name)}])
+    GenServer.start_link(__MODULE__, %{source: name}, [
+      {:name, String.to_atom("#{__MODULE__}.#{name}")}
+    ])
   end
 
   @impl true
