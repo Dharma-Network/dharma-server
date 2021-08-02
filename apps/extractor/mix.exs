@@ -20,7 +20,7 @@ defmodule Extractor.MixProject do
     [
       extra_applications: [:lager, :logger, :amqp, :jason],
       mod: {Extractor.Application, []},
-      applications: [:amqp, :tentacat],
+      applications: [:amqp, :tentacat, :finch, :tesla],
       env: [source: []]
     ]
   end
@@ -28,7 +28,9 @@ defmodule Extractor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:tesla, "~> 1.4"},
       {:jason, "~> 1.2"},
+      {:finch, "~> 0.3"},
       {:amqp, "~> 1.0"},
       {:tentacat, "~> 1.0"}
     ]

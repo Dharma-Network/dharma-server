@@ -1,6 +1,4 @@
 defmodule Loader.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -8,19 +6,20 @@ defmodule Loader.Application do
 
   plug(Tesla.Middleware.Logger)
 
+  @url Application.fetch_env!(:loader, :url_db)
+
   @impl true
   def start(_type, _args) do
     Finch.start_link(name: MyFinch)
-    client = client()
-    cookie = get_cookie(client)
-    client = client(cookie)
+    client =
+      client()
+      |> get_cookie()
+      |> client()
 
     children = [
       {Loader, client}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Loader.Supervisor]
     Supervisor.start_link(children, opts)
   end
@@ -28,11 +27,9 @@ defmodule Loader.Application do
   def client(cookie \\ "")
 
   def client(cookie) when cookie == "" do
-    base_url = Application.fetch_env!(:loader, :url)
-
     Tesla.client(
       [
-        {Tesla.Middleware.BaseUrl, base_url},
+        {Tesla.Middleware.BaseUrl, @url},
         Tesla.Middleware.JSON
       ],
       {Tesla.Adapter.Finch, name: MyFinch}
@@ -40,11 +37,9 @@ defmodule Loader.Application do
   end
 
   def client(cookie) do
-    base_url = Application.fetch_env!(:loader, :url)
-
     Tesla.client(
       [
-        {Tesla.Middleware.BaseUrl, base_url},
+        {Tesla.Middleware.BaseUrl, @url},
         {Tesla.Middleware.Headers, [{"cookie", cookie}]},
         Tesla.Middleware.JSON
       ],

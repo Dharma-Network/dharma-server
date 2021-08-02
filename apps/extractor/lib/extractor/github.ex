@@ -10,18 +10,16 @@ defmodule Extractor.Github do
 
   use GenServer
   @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
-  @owner "Dharma-Network"
-  @repo "dharma-server"
   @default_extract_rate 5
   @source "github"
 
   @doc """
   Convenience method for startup.
   """
-  @spec start_link() :: :ignore | {:error, any} | {:ok, pid}
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{etag: ""}, [
-      {:name, String.to_atom("#{__MODULE__}.#{@source}")}
+  @spec start_link([{String.t, String.t}]) :: :ignore | {:error, any} | {:ok, pid}
+  def start_link(sources) do
+    GenServer.start_link(__MODULE__, %{etag: "", source: sources}, [
+    {:name, String.to_atom("#{__MODULE__}.#{@source}")}
     ])
   end
 
@@ -44,12 +42,16 @@ defmodule Extractor.Github do
     {:ok, new_state}
   end
 
-  # Fetches recent pulls.
   defp fetch(state) do
+    Enum.map(state.source, fn {owner, repo} -> fetch(state, owner, repo) end)
+  end
+
+  # Fetches recent pulls.
+  defp fetch(state, owner, repo) do
     # Set a extra header to contain the etag header (only if it's not empty)
     Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{state.etag}"}])
 
-    case efficient_pulling(state.client, @owner, @repo, state.date) do
+    case efficient_pulling(state.client, owner, repo, state.date) do
       {[], _resp} ->
         nil
 
