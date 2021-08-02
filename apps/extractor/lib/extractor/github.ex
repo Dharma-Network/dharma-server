@@ -1,4 +1,4 @@
-defmodule Connector do
+defmodule Extractor.Github do
   @moduledoc """
   This is the `Connector` module.
   This module aims to receive raw data from
@@ -12,27 +12,23 @@ defmodule Connector do
   @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
   @owner "Dharma-Network"
   @repo "dharma-server"
+  @default_extract_rate 5
+  @source "github"
 
   @doc """
   Convenience method for startup.
   """
-  @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(name) do
-    GenServer.start_link(__MODULE__, %{source: name, etag: ""}, [
-      {:name, String.to_atom("#{__MODULE__}.#{name}")}
+  @spec start_link() :: :ignore | {:error, any} | {:ok, pid}
+  def start_link() do
+    GenServer.start_link(__MODULE__, %{etag: ""}, [
+      {:name, String.to_atom("#{__MODULE__}.#{@source}")}
     ])
   end
 
   # Fetch pull time.
-  defp pull_time(name) do
-    rate = String.downcase(name) <> "_extract_rate"
-
-    {:ok, time} =
-      case Application.fetch_env(:extractor, String.to_atom(rate)) do
-        :error -> Application.fetch_env(:extractor, :default_extract_rate)
-        pt -> pt
-      end
-
+  defp pull_time() do
+    rate = @source <> "_extract_rate"
+    time = Application.get_env(:extractor, String.to_atom(rate), @default_extract_rate)
     time * 60 * 1000
   end
 
@@ -85,6 +81,7 @@ defmodule Connector do
             {:ok, dt} = NaiveDateTime.from_iso8601(pull["closed_at"])
             valid_time?(dt, from)
           end)
+          |> Enum.map(fn x -> extract_relevant_data(x, client) end)
 
         {value, resp}
 
@@ -124,17 +121,16 @@ defmodule Connector do
   end
 
   @doc """
-  Fetch pulls every `EXTRACT_RATE` and send them to RabbitMQ queue. 
+  Fetch pulls every `EXTRACT_RATE` and send them to RabbitMQ queue.
   """
   @impl true
   def handle_info(:pull_data, state) do
     new_state =
       case fetch(state) do
-        {new_state, pulls} ->
-          pulls
-          |> Enum.map(fn x -> extract_relevant_data(x, state.client) end)
+        {new_state, info} ->
+          info
           |> Jason.encode!()
-          |> send(state.source, state.channel)
+          |> send(@source, state.channel)
 
           new_state
 
@@ -149,7 +145,7 @@ defmodule Connector do
   # Update DateTime and schedule pull.
   defp timer(state) do
     date = NaiveDateTime.local_now()
-    Process.send_after(self(), :pull_data, pull_time(state.source))
+    Process.send_after(self(), :pull_data, pull_time())
     Map.put(state, :date, date)
   end
 
