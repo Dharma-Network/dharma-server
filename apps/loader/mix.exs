@@ -18,14 +18,14 @@ defmodule Loader.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:lager, :logger, :amqp],
       applications: [:amqp, :tesla, :jason, :finch],
       mod: {Loader.Application, []},
       env: [url: [], user_db: [], password_db: []]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
+  # 
   defp deps do
     [
       {:tesla, "~> 1.4"},
