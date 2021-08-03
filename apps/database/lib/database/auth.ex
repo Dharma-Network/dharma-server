@@ -6,15 +6,19 @@ defmodule Database.Auth do
 
   plug(Tesla.Middleware.BaseUrl, @url)
   plug(Tesla.Middleware.JSON)
+
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
 
   def start_link(_opts) do
-    cookie = retrieve_cookie()
-    Agent.start_link(fn -> cookie end, name: __MODULE__)
+    Agent.start_link(fn -> retrieve_cookie() end, name: __MODULE__)
   end
 
   def get_cookie do
     Agent.get(__MODULE__, & &1)
+  end
+
+  def refresh_cookie() do
+    Agent.update(__MODULE__, fn _ -> retrieve_cookie() end)
   end
 
   defp retrieve_cookie() do
