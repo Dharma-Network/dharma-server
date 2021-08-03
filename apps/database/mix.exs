@@ -1,9 +1,9 @@
-defmodule Extractor.MixProject do
+defmodule Database.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :extractor,
+      app: :database,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -18,19 +18,21 @@ defmodule Extractor.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:lager, :logger, :amqp, :jason],
-      mod: {Extractor.Application, []},
-      applications: [:amqp, :tentacat],
+      extra_applications: [:logger, :jason],
+      mod: {Database.Application, []},
+      applications: [:finch, :tesla]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:tesla, "~> 1.4"},
       {:jason, "~> 1.2"},
-      {:amqp, "~> 1.0"},
-      {:tentacat, "~> 1.0"},
-      {:database, in_umbrella: true}
+      {:finch, "~> 0.3"}
+      # {:dep_from_hexpm, "~> 0.3.0"},
+      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      # {:sibling_app_in_umbrella, in_umbrella: true}
     ]
   end
 end

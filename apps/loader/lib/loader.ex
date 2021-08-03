@@ -1,19 +1,14 @@
 defmodule Loader do
   use GenServer
-  use Tesla
 
-  adapter(Tesla.Adapter.Finch, name: MyFinch)
   @dharma_exchange Application.fetch_env!(:loader, :rabbit_exchange)
 
   @moduledoc """
-  This module redirects data from processed queues to couchdb and blockchain.
+  This module redirects data from processed queues to database and blockchain.
   """
 
-  @doc """
-  Starts a connection to handle one input source named `client`.
-  """
-  def start_link(client) do
-    GenServer.start_link(__MODULE__, %{client: client}, [{:name, __MODULE__}])
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, %{}, [{:name, __MODULE__}])
   end
 
   @impl true
@@ -40,11 +35,11 @@ defmodule Loader do
     new_state = Map.put(state, :channel, channel)
 
     AMQP.Queue.subscribe(channel, "process_dashboard", fn payload, meta ->
-      send_data_couch(payload, meta, new_state)
+      send_to_database(payload, meta)
     end)
 
     AMQP.Queue.subscribe(channel, "process_blockchain", fn payload, meta ->
-      send_data_blockchain(payload, meta, new_state)
+      send_to_blockchain(payload, meta, new_state)
     end)
 
     new_state
@@ -61,15 +56,13 @@ defmodule Loader do
   end
 
   # Process the payload and send it to the correct topic.
-  # TODO: Don't rely on couchdb UUID
-  defp send_data_couch(payload, meta, state) do
+  defp send_to_database(payload, meta) do
     IO.inspect("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
     body = %{"topic" => meta.routing_key, "payload" => payload}
-    db_name = Application.fetch_env!(:loader, :name_db)
-    post(state.client, "/" <> db_name, body)
+    Database.post(body)
   end
 
-  defp send_data_blockchain(_payload, _meta, _state) do
+  defp send_to_blockchain(_payload, _meta, _state) do
     :ok
   end
 

@@ -16,8 +16,10 @@ defmodule Extractor.Github do
   @doc """
   Convenience method for startup.
   """
-  @spec start_link([{String.t, String.t}]) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(sources) do
+  @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
+  def start_link(_opts) do
+    sources = Database.get_github_sources()
+
     GenServer.start_link(__MODULE__, %{source: sources}, [
       {:name, String.to_atom("#{__MODULE__}.#{@source}")}
     ])
@@ -47,16 +49,18 @@ defmodule Extractor.Github do
   end
 
   defp fetch(state) do
+    # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
-      # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
-      Enum.reduce(state.source, {%{},[]},
-        fn {{owner, repo}, etag}, acc = {map, list} ->
-          case fetch(state, owner, repo, etag) do
-            {new_etag, value} ->
-              {Map.put(map, {owner, repo}, new_etag), [value | list]}
-            nil -> acc
-          end
-        end)
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, acc = {map, list} ->
+        case fetch(state, owner, repo, etag) do
+          {new_etag, value} ->
+            {Map.put(map, {owner, repo}, new_etag), [value | list]}
+
+          nil ->
+            acc
+        end
+      end)
+
     {Map.put(state, :source, new_sources), data}
   end
 
@@ -141,7 +145,9 @@ defmodule Extractor.Github do
   def handle_info(:pull_data, state) do
     new_state =
       case fetch(state) do
-        {_,  []} -> state
+        {_, []} ->
+          state
+
         {new_state, data} ->
           data
           |> Jason.encode!()
