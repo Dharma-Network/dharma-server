@@ -27,15 +27,17 @@ defmodule Extractor.Application do
       |> get_cookie()
       |> client()
 
-    {:ok, resp} = get(client, @url <> "/" <> @name_db <> "/_design/git_views/_view/urls")
+    body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
+    {:ok, resp} = post(client, @url <> "/" <> @name_db <> "/_find", body)
 
-    resp.body["rows"]
-    |> Enum.flat_map(fn row ->
-      Enum.map(row["value"], fn val ->
-        [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, val)
-        {owner, repo}
+    resp.body["docs"]
+    |> Enum.flat_map(fn doc ->
+      Enum.map(doc["list_of_urls"], fn url ->
+        [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
+        {{owner, repo}, ""}
       end)
     end)
+    |> Enum.into(%{}, &(&1))
   end
 
   def client(cookie \\ "")
