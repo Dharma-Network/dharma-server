@@ -9,7 +9,7 @@ defmodule Database.Operations do
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
 
   def get_github_sources() do
-    client = get_cookie() |> client()
+    client = client()
 
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
     {:ok, resp} = post(client, @name_db <> "/_find", body)
@@ -24,19 +24,10 @@ defmodule Database.Operations do
     |> Enum.into(%{}, & &1)
   end
 
-  defp client(cookie) do
+  defp client do
     Tesla.client([
-      {Tesla.Middleware.Headers, [{"cookie", cookie}]}
+      {Tesla.Middleware.Headers, [{"cookie", Database.Auth.get_cookie()}]}
     ])
-  end
-
-  defp get_cookie() do
-    user_name = Application.fetch_env!(:database, :user_db)
-    user_password = Application.fetch_env!(:database, :password_db)
-    body = %{"name" => user_name, "password" => user_password}
-    {:ok, response} = post("_session", body)
-
-    Tesla.get_header(response, "set-cookie")
   end
 
   # TODO: Don't rely on couchdb UUID
