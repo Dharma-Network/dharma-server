@@ -18,9 +18,9 @@ defmodule Extractor.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:lager, :logger, :amqp, :jason],
+      extra_applications: [:lager, :logger, :amqp, :jason, :database],
       mod: {Extractor.Application, []},
-      applications: [:amqp, :tentacat],
+      applications: [:amqp, :tentacat]
     ]
   end
 

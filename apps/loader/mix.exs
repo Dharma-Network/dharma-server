@@ -18,9 +18,9 @@ defmodule Loader.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:lager, :logger, :amqp],
+      extra_applications: [:lager, :logger, :amqp, :database],
       applications: [:amqp, :jason],
-      mod: {Loader.Application, []},
+      mod: {Loader.Application, []}
     ]
   end
 

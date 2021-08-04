@@ -5,7 +5,7 @@ defmodule Extractor.Application do
 
   @impl true
   def start(_type, _args) do
-    # Logger.remove_backend(:console)
+    Logger.remove_backend(:console)
     opts = [strategy: :one_for_one, name: Extractor.Supervisor]
 
     children = [
