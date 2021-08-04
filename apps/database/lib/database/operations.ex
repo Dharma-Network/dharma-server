@@ -31,7 +31,7 @@ defmodule Database.Operations do
     case resp.status do
       401 ->
         Database.Auth.refresh_auth()
-        post_with_retry(client(), path, body)
+        post_with_retry(path, body)
 
       _ ->
         {:ok, resp}

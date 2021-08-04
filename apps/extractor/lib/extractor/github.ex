@@ -163,8 +163,7 @@ defmodule Extractor.Github do
   # Update DateTime and schedule pull.
   defp timer(state) do
     date = NaiveDateTime.local_now()
-    Process.send_after(self(), :pull_data, pull_time(:test, 1000))
-    Database.get_github_sources() |> IO.inspect()
+    Process.send_after(self(), :pull_data, pull_time())
     Map.put(state, :date, date)
   end
 
