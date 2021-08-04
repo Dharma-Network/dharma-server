@@ -6,14 +6,13 @@ defmodule Database.Operations do
 
   plug(Tesla.Middleware.BaseUrl, @url)
   plug(Tesla.Middleware.JSON)
-  # plug(Tesla.Middleware.Headers, [{"Authorization", "Bearer " <> Database.Auth.get_jwt()}])
 
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
 
+  # Fetches the github sources from the database.
   def get_github_sources() do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
     {:ok, resp} = post_with_retry(@name_db <> "/_find", body)
-    IO.inspect(resp, label: "get_gith")
 
     resp.body["docs"]
     |> Enum.flat_map(fn doc ->
@@ -25,17 +24,13 @@ defmodule Database.Operations do
     |> Enum.into(%{}, & &1)
   end
 
-  defp post_with_retry(client, path, body) do
-    post(client, path, body)
-  end
-
+  # If the post fails then refresh the authentication and try again.
   defp post_with_retry(path, body) do
     {:ok, resp} = post(client(), path, body)
 
     case resp.status do
       401 ->
-        IO.puts("Refresh")
-        Database.Auth.refresh_jwt()
+        Database.Auth.refresh_auth()
         post_with_retry(client(), path, body)
 
       _ ->
@@ -43,14 +38,16 @@ defmodule Database.Operations do
     end
   end
 
+  # Builds the headers for the requests.
   defp client do
     middleware = [
-      {Tesla.Middleware.Headers, [{"Authorization", "Bearer " <> Database.Auth.get_jwt()}]}
+      {Tesla.Middleware.Headers, [{"Authorization", "Bearer " <> Database.Auth.get_auth()}]}
     ]
 
     Tesla.client(middleware)
   end
 
+  # Posts a document with the given body
   # TODO: Don't rely on couchdb UUID
   def post(body) do
     post_with_retry("/" <> @name_db, body)
