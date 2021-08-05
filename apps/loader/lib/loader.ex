@@ -1,7 +1,7 @@
 defmodule Loader do
   use GenServer
 
-  @dharma_exchange Application.fetch_env!(:loader, :rabbit_exchange)
+  @dharma_exchange Application.compile_env!(:loader, :rabbit_exchange)
 
   @moduledoc """
   This module redirects data from processed queues to database and blockchain.

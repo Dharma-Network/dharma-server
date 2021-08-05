@@ -7,8 +7,8 @@ defmodule Database.Auth do
   use Tesla
   use Joken.Config
 
-  @url Application.fetch_env!(:database, :url_db)
-  @jwt_secret Application.fetch_env!(:database, :jwt_secret)
+  @url Application.compile_env!(:database, :url_db)
+  @jwt_secret Application.compile_env!(:database, :jwt_secret)
   @sign_alg "HS256"
   @exp_claim_time 14
   @sub_user "admin"

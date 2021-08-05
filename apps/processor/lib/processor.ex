@@ -6,7 +6,7 @@ defmodule Processor do
   It reads data from a queue, processes that same data and forwards it to processed queues.
   """
 
-  @dharma_exchange Application.fetch_env!(:processor, :rabbit_exchange)
+  @dharma_exchange Application.compile_env!(:processor, :rabbit_exchange)
 
   @doc """
   Starts a connection to handle one input source named `name`.

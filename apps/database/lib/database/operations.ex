@@ -4,8 +4,8 @@ defmodule Database.Operations do
   """
   use Tesla
 
-  @url Application.fetch_env!(:database, :url_db)
-  @name_db Application.fetch_env!(:database, :name_db)
+  @url Application.compile_env!(:database, :url_db)
+  @name_db Application.compile_env!(:database, :name_db)
 
   plug(Tesla.Middleware.BaseUrl, @url)
   plug(Tesla.Middleware.JSON)

@@ -9,7 +9,7 @@ defmodule Extractor.Github do
   @moduledoc since: "1.0.0"
 
   use GenServer
-  @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
+  @dharma_exchange Application.compile_env!(:extractor, :rabbit_exchange)
   @default_extract_rate 5
   @source "github"
 
