@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-We recommend using asdf for version management: https://github.com/asdf-vm/asdf
+We recommend using [asdf-vm](http://asdf-vm.com/guide/getting-started.html#getting-started) for version management.
 
 1. Elixir 1.12 - https://elixir-lang.org/install.html
 2. Erlang/OTP 24 - https://erlang.org/documentation/doc-5.7.4/doc/installation_guide/install.html
@@ -28,6 +28,10 @@ Now run the app:
 
 ```iex -S mix```
 
-Or run tests:
+### Other useful commands
 
-```mix test```
+- `mix test` --> Run tests
+
+## Project architecture
+
+This application is organized as an [umbrella project](https://elixir-lang.org/getting-started/mix-otp/dependencies-and-umbrella-apps.html).
