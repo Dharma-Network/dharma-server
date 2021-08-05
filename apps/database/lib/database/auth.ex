@@ -1,4 +1,8 @@
 defmodule Database.Auth do
+  @moduledoc """
+  Module that deals with authentication and provides it seamlessly.
+  """
+
   use Agent
   use Tesla
   use Joken.Config
@@ -32,7 +36,6 @@ defmodule Database.Auth do
   defp retrieve_auth() do
     signer = Joken.Signer.create(@sign_alg, @jwt_secret)
     {:ok, token, _claims} = generate_and_sign(%{}, signer)
-    Joken.expand(token)
     token
   end
 

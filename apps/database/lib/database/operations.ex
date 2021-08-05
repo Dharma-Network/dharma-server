@@ -1,4 +1,7 @@
 defmodule Database.Operations do
+  @moduledoc """
+  Module that contains all database operations we provide.
+  """
   use Tesla
 
   @url Application.fetch_env!(:database, :url_db)

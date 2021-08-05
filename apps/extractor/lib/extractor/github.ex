@@ -21,7 +21,7 @@ defmodule Extractor.Github do
     sources = Database.get_github_sources()
 
     GenServer.start_link(__MODULE__, %{source: sources}, [
-      {:name, String.to_atom("#{__MODULE__}.#{@source}")}
+      {:name, __MODULE__}
     ])
   end
 
