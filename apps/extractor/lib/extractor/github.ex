@@ -9,23 +9,27 @@ defmodule Extractor.Github do
   @moduledoc since: "1.0.0"
 
   use GenServer
-  @dharma_exchange Application.fetch_env!(:extractor, :rabbit_exchange)
-  @owner "Dharma-Network"
-  @repo "dharma-server"
+  @dharma_exchange Application.compile_env!(:extractor, :rabbit_exchange)
   @default_extract_rate 5
   @source "github"
 
   @doc """
   Convenience method for startup.
   """
-  @spec start_link() :: :ignore | {:error, any} | {:ok, pid}
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{etag: ""}, [
-      {:name, String.to_atom("#{__MODULE__}.#{@source}")}
+  @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
+  def start_link(_opts) do
+    sources = Database.get_github_sources()
+
+    GenServer.start_link(__MODULE__, %{source: sources}, [
+      {:name, __MODULE__}
     ])
   end
 
   # Fetch pull time.
+  defp pull_time(:test, t) do
+    t
+  end
+
   defp pull_time() do
     rate = @source <> "_extract_rate"
     time = Application.get_env(:extractor, String.to_atom(rate), @default_extract_rate)
@@ -44,23 +48,37 @@ defmodule Extractor.Github do
     {:ok, new_state}
   end
 
-  # Fetches recent pulls.
   defp fetch(state) do
-    # Set a extra header to contain the etag header (only if it's not empty)
-    Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{state.etag}"}])
+    # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
+    {new_sources, data} =
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, acc = {map, list} ->
+        case fetch(state, owner, repo, etag) do
+          {new_etag, value} ->
+            {Map.put(map, {owner, repo}, new_etag), [value | list]}
 
-    case efficient_pulling(state.client, @owner, @repo, state.date) do
+          nil ->
+            acc
+        end
+      end)
+
+    {Map.put(state, :source, new_sources), data}
+  end
+
+  # Fetches recent pulls.
+  defp fetch(state, owner, repo, etag) do
+    # Set a extra header to contain the etag header (only if it's not empty)
+    IO.inspect("#{owner} #{repo}", label: "fetching from ")
+    Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
+
+    case efficient_pulling(state.client, owner, repo, state.date) do
       {[], _resp} ->
         nil
 
       {pulls, resp} ->
-        etag = retrieve_etag(resp)
+        new_etag = retrieve_etag(resp)
+        valid = Enum.filter(pulls, &is_merged?(&1, state.client, owner, repo))
 
-        valid = Enum.filter(pulls, &is_merged?(&1, state.client))
-
-        new_state = Map.put(state, :etag, etag)
-
-        {new_state, valid}
+        {new_etag, valid}
 
       nil ->
         nil
@@ -81,7 +99,7 @@ defmodule Extractor.Github do
             {:ok, dt} = NaiveDateTime.from_iso8601(pull["closed_at"])
             valid_time?(dt, from)
           end)
-          |> Enum.map(fn x -> extract_relevant_data(x, client) end)
+          |> Enum.map(fn x -> extract_relevant_data(x, client, owner, repo) end)
 
         {value, resp}
 
@@ -97,8 +115,8 @@ defmodule Extractor.Github do
   end
 
   # Filters relevant data from a pull request.
-  def extract_relevant_data(pull, client) do
-    {_status, files, _resp} = Tentacat.Pulls.Files.list(client, @owner, @repo, pull["number"])
+  def extract_relevant_data(pull, client, owner, repo) do
+    {_status, files, _resp} = Tentacat.Pulls.Files.list(client, owner, repo, pull["number"])
 
     Enum.map(files, fn file ->
       %{filename: file["filename"], additions: file["additions"], status: file["status"]}
@@ -113,8 +131,8 @@ defmodule Extractor.Github do
     |> elem(1)
   end
 
-  defp is_merged?(pull, client) do
-    merged_info = Tentacat.Pulls.has_been_merged(client, @owner, @repo, pull["number"])
+  defp is_merged?(pull, client, owner, repo) do
+    merged_info = Tentacat.Pulls.has_been_merged(client, owner, repo, pull["number"])
 
     # Confirms that it was merged (not including closed PR's this way)
     match?({204, _, _}, merged_info)
@@ -127,15 +145,15 @@ defmodule Extractor.Github do
   def handle_info(:pull_data, state) do
     new_state =
       case fetch(state) do
-        {new_state, info} ->
-          info
+        {_, []} ->
+          state
+
+        {new_state, data} ->
+          data
           |> Jason.encode!()
           |> send(@source, state.channel)
 
           new_state
-
-        nil ->
-          state
       end
 
     timer(new_state)
