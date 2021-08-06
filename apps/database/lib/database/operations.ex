@@ -4,10 +4,10 @@ defmodule Database.Operations do
   """
   use Tesla
 
-  @url Application.compile_env!(:database, :url_db)
-  @name_db Application.compile_env!(:database, :name_db)
+  defp db_url, do: Application.fetch_env!(:database, :url_db)
+  defp db_name, do: Application.fetch_env!(:database, :name_db)
 
-  plug(Tesla.Middleware.BaseUrl, @url)
+  plug(Tesla.Middleware.BaseUrl, db_url())
   plug(Tesla.Middleware.JSON)
 
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
@@ -15,7 +15,7 @@ defmodule Database.Operations do
   # Fetches the github sources from the database.
   def get_github_sources() do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
-    {:ok, resp} = post_with_retry(@name_db <> "/_find", body)
+    {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
 
     resp.body["docs"]
     |> Enum.flat_map(fn doc ->
@@ -53,6 +53,6 @@ defmodule Database.Operations do
   # Posts a document with the given body
   # TODO: Don't rely on couchdb UUID
   def post(body) do
-    post_with_retry("/" <> @name_db, body)
+    post_with_retry("/" <> db_name(), body)
   end
 end

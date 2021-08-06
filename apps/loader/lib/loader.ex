@@ -1,7 +1,8 @@
 defmodule Loader do
   use GenServer
+  require Logger
 
-  @dharma_exchange Application.compile_env!(:loader, :rabbit_exchange)
+  defp dharma_exchange, do: Application.fetch_env!(:loader, :rabbit_exchange)
 
   @moduledoc """
   This module redirects data from processed queues to database and blockchain.
@@ -23,7 +24,7 @@ defmodule Loader do
     url = Application.fetch_env!(:loader, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
-    AMQP.Exchange.declare(channel, @dharma_exchange, :topic)
+    AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
 
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
 
@@ -51,13 +52,13 @@ defmodule Loader do
     AMQP.Queue.declare(channel, queue_name, exclusive: false, durable: true)
 
     Enum.each(topics, fn x ->
-      AMQP.Queue.bind(channel, queue_name, @dharma_exchange, routing_key: x)
+      AMQP.Queue.bind(channel, queue_name, dharma_exchange(), routing_key: x)
     end)
   end
 
   # Process the payload and send it to the correct topic.
   defp send_to_database(payload, meta) do
-    IO.inspect("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
+    Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
     body = %{"topic" => meta.routing_key, "payload" => payload}
     Database.post(body)
   end

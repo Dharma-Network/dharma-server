@@ -9,9 +9,12 @@ defmodule Extractor.Github do
   @moduledoc since: "1.0.0"
 
   use GenServer
-  @dharma_exchange Application.compile_env!(:extractor, :rabbit_exchange)
+  require Logger
+
   @default_extract_rate 5
   @source "github"
+
+  defp dharma_exchange, do: Application.fetch_env!(:extractor, :rabbit_exchange)
 
   @doc """
   Convenience method for startup.
@@ -67,7 +70,7 @@ defmodule Extractor.Github do
   # Fetches recent pulls.
   defp fetch(state, owner, repo, etag) do
     # Set a extra header to contain the etag header (only if it's not empty)
-    IO.inspect("#{owner} #{repo}", label: "fetching from ")
+    Logger.info("#{owner} #{repo}", label: "fetching from ")
     Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
 
     case efficient_pulling(state.client, owner, repo, state.date) do
@@ -180,7 +183,7 @@ defmodule Extractor.Github do
     url = Application.fetch_env!(:extractor, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
-    AMQP.Exchange.declare(channel, @dharma_exchange, :topic)
+    AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
     Map.merge(state, %{connection: connection, channel: channel})
   end
 
@@ -188,8 +191,8 @@ defmodule Extractor.Github do
   @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
   defp send(message, source, channel) do
     topic = "insert.raw." <> source
-    AMQP.Basic.publish(channel, @dharma_exchange, topic, message, persistent: true)
-    IO.inspect("[#{topic}] #{message}", label: "[x] Sent")
+    AMQP.Basic.publish(channel, dharma_exchange(), topic, message, persistent: true)
+    Logger.info("[#{topic}] #{message}", label: "[x] Sent")
   end
 
   # Close RabbitMQ connection.
