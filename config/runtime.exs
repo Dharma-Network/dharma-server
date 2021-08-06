@@ -8,7 +8,7 @@ config :database,
   jwt_secret: System.fetch_env!("JWT_SECRET")
 
 config :extractor,
-  github_token: System.fetch_env!("GITHUB_TOKEN")
+  github_token: System.fetch_env!("GITHUB_TOKEN"),
   rabbit_url: System.fetch_env!("RABBIT_URL"),
   rabbit_exchange: System.fetch_env!("RABBIT_EXCHANGE")
 
