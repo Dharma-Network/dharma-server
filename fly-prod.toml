@@ -1,4 +1,4 @@
-app = "dharma-server"
+app = "dharma-prod"
 
 kill_signal = "SIGTERM"
 kill_timeout = 5
