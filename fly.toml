@@ -1,4 +1,4 @@
-app = "polished-dawn-7793"
+app = "dharma-server"
 
 kill_signal = "SIGTERM"
 kill_timeout = 5
@@ -6,7 +6,7 @@ kill_timeout = 5
 [env]
 
 [deploy]
-  release_command = "/app/bin/dharma-server start"
+  release_command = "/app/bin/dharma_server start"
 
 [[services]]
   internal_port = 4000
