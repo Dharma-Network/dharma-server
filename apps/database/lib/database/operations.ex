@@ -15,7 +15,8 @@ defmodule Database.Operations do
   # Fetches the github sources from the database.
   def get_github_sources() do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
-    {:ok, resp} = post_with_retry(@name_db <> "/_find", body)
+    mango_query_url = @name_db <> "/_find"
+    {:ok, resp} = post_with_retry(mango_query_url, body)
 
     resp.body["docs"]
     |> Enum.flat_map(fn doc ->
@@ -25,6 +26,16 @@ defmodule Database.Operations do
       end)
     end)
     |> Enum.into(%{}, & &1)
+  end
+
+  # Fetches the rules from the database.
+  # TODO: Add sort by reward
+  def get_rules(source) do
+    body = %{selector: %{type: %{"$eq": "rule"}, source: %{"$eq": source}}, fields: ["rule_specific_details", "reward"]}
+    mango_query_url = @name_db <> "/_find"
+    {:ok, resp} = post_with_retry(mango_query_url, body)
+
+    resp.body["docs"]
   end
 
   # If the post fails then refresh the authentication and try again.

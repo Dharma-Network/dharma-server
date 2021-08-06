@@ -76,9 +76,7 @@ defmodule Extractor.Github do
 
       {pulls, resp} ->
         new_etag = retrieve_etag(resp)
-        valid = Enum.filter(pulls, &is_merged?(&1, state.client, owner, repo))
-
-        {new_etag, valid}
+        {new_etag, pulls}
 
       nil ->
         nil
@@ -99,7 +97,8 @@ defmodule Extractor.Github do
             {:ok, dt} = NaiveDateTime.from_iso8601(pull["closed_at"])
             valid_time?(dt, from)
           end)
-          |> Enum.map(fn x -> extract_relevant_data(x, client, owner, repo) end)
+          |> Enum.filter(&is_merged?(&1, client, owner, repo))
+          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo) end)
 
         {value, resp}
 
@@ -111,16 +110,31 @@ defmodule Extractor.Github do
 
   # Checks if a datetime is after the provided one.
   defp valid_time?(dt, from) do
+    IO.inspect(dt)
+    IO.inspect(from)
+    IO.inspect("--------------__")
     NaiveDateTime.compare(dt, from) == :gt
   end
 
   # Filters relevant data from a pull request.
   def extract_relevant_data(pull, client, owner, repo) do
     {_status, files, _resp} = Tentacat.Pulls.Files.list(client, owner, repo, pull["number"])
+    {_status, reviews, _resp} = Tentacat.Pulls.Reviews.list(client, owner, repo, pull["number"])
+    {_status, commits, _resp} = Tentacat.Pulls.Commits.list(client, owner, repo, pull["number"])
 
-    Enum.map(files, fn file ->
-      %{filename: file["filename"], additions: file["additions"], status: file["status"]}
-    end)
+    %{
+      owner: owner,
+      repo: repo,
+      action_type: "pull_request",
+      pull: pull,
+      reviews: reviews,
+      files: files,
+      commits: commits
+    }
+
+    # Enum.map(files, fn file ->
+    # %{filename: file["filename"], additions: file["additions"], status: file["status"]}
+    # end)
   end
 
   # Retrieves the ETag from a response, will be needed when we implement conditional requests.
@@ -150,8 +164,11 @@ defmodule Extractor.Github do
 
         {new_state, data} ->
           data
-          |> Jason.encode!()
-          |> send(@source, state.channel)
+          |> Enum.each(fn pull_data ->
+            pull_data
+            |> Jason.encode!()
+            |> send(@source, state.channel)
+          end)
 
           new_state
       end
@@ -162,7 +179,7 @@ defmodule Extractor.Github do
 
   # Update DateTime and schedule pull.
   defp timer(state) do
-    date = NaiveDateTime.local_now()
+    date = DateTime.utc_now()
     Process.send_after(self(), :pull_data, pull_time())
     Map.put(state, :date, date)
   end
