@@ -30,12 +30,16 @@ defmodule Database.Operations do
 
   # Fetches the rules from the database.
   # TODO: Add sort by reward
-  def get_rules(source) do
-    body = %{selector: %{type: %{"$eq": "rule"}, source: %{"$eq": source}}, fields: ["rule_specific_details", "reward"]}
+  def get_rules() do
+    body = %{selector: %{type: %{"$eq": "action"}}, fields: ["action", "rule_specific_details"]}
     mango_query_url = @name_db <> "/_find"
     {:ok, resp} = post_with_retry(mango_query_url, body)
 
     resp.body["docs"]
+    |> Enum.map(fn rule ->
+      {rule["action"], rule["rule_specific_details"]}
+    end)
+    |> Enum.into(%{}, & &1)
   end
 
   # If the post fails then refresh the authentication and try again.

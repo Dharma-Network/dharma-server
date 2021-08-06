@@ -12,7 +12,7 @@ defmodule Processor do
   Starts a connection to handle one input source named `name`.
   """
   def start_link(name) do
-    #rules = Database.get_rules(name)
+    _rules = Database.get_rules() |> IO.inspect()
 
     GenServer.start_link(__MODULE__, %{source: name}, [
       {:name, String.to_atom("#{__MODULE__}.#{name}")}
@@ -71,6 +71,23 @@ defmodule Processor do
   # Identity for now, will change later on!
   @spec process(any) :: any
   defp process(message) do
+    info = message |> Jason.decode!()
+
+    # TODO: criar a "estrutura de dados" para mandar para as rules
+    narrowed = %{
+      "number_of_lines" => info.pull["additions"],
+      # ver se vale a pena passar non_merged PR do extractor para o processor
+      "is_merged" => true,
+      "is_reviewed" =>
+        case info.reviews
+             |> Enum.filter(&(&1 != "COMMENTED"))
+             |> List.last() do
+          "APPROVED" -> :positive
+          "CHANGES_REQUESTED" -> :negative
+          _ -> :unreviewed
+        end
+    }
+
     message
   end
 
