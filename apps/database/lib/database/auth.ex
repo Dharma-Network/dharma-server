@@ -7,13 +7,13 @@ defmodule Database.Auth do
   use Tesla
   use Joken.Config
 
-  @url Application.compile_env!(:database, :url_db)
-  @jwt_secret Application.compile_env!(:database, :jwt_secret)
+  defp db_url, do: Application.fetch_env!(:database, :url_db)
+  defp jwt_secret, do: Application.fetch_env!(:database, :jwt_secret)
   @sign_alg "HS256"
   @exp_claim_time 14
   @sub_user "admin"
 
-  plug(Tesla.Middleware.BaseUrl, @url)
+  plug(Tesla.Middleware.BaseUrl, db_url())
   plug(Tesla.Middleware.JSON)
 
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
@@ -34,7 +34,7 @@ defmodule Database.Auth do
 
   # Builds a new JWT token.
   defp retrieve_auth() do
-    signer = Joken.Signer.create(@sign_alg, @jwt_secret)
+    signer = Joken.Signer.create(@sign_alg, jwt_secret())
     {:ok, token, _claims} = generate_and_sign(%{}, signer)
     token
   end
