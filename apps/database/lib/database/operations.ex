@@ -17,14 +17,19 @@ defmodule Database.Operations do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
     {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
 
-    resp.body["docs"]
-    |> Enum.flat_map(fn doc ->
-      Enum.map(doc["list_of_urls"], fn url ->
-        [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
-        {{owner, repo}, ""}
-      end)
-    end)
-    |> Enum.into(%{}, & &1)
+    case resp.body["docs"] do
+      nil ->
+        {:error, "No docs found"}
+      docs ->
+        docs
+        |> Enum.flat_map(fn doc ->
+          Enum.map(doc["list_of_urls"], fn url ->
+            [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
+            {{owner, repo}, ""}
+          end)
+        end)
+        |> Enum.into(%{}, & &1)
+    end
   end
 
   # If the post fails then refresh the authentication and try again.
