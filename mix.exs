@@ -6,7 +6,17 @@ defmodule DharmaServer.MixProject do
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      releases: [
+        dharma_server: [
+          applications: [
+            database: :permanent,
+            extractor: :permanent,
+            loader: :permanent,
+            processor: :permanent
+          ]
+        ]
+      ]
     ]
   end
 
