@@ -61,7 +61,7 @@ defmodule Loader do
     Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
 
     Jason.decode!(payload)
-    |> Database.post()
+    |> Database.post_to_db()
   end
 
   defp send_to_blockchain(_payload, _meta, _state) do

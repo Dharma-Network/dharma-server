@@ -41,7 +41,7 @@ defmodule Processor.Listener do
 
     resp.body["results"]
     |> Enum.map(&hd(&1["docs"])["ok"]["type"])
-    |> Enum.any?(&(&1 == "action"))
+    |> Enum.any?(&(&1 == "action_rules"))
   end
 
   # Could this be improved?

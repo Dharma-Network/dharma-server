@@ -9,7 +9,8 @@ defmodule Processor.Action do
     dharma = Processor.Rating.rate_pull_request(info, rules)
 
     %{
-      "type" => "pull_request",
+      "type" => "action",
+      "action_type" => "pull_request",
       "owner" => info["owner"],
       "repo" => info["repo"],
       "title" => info["pull"]["title"],
@@ -17,7 +18,9 @@ defmodule Processor.Action do
       "user" => info["pull"]["user"]["login"],
       "is_reviewed" => evaluate_reviews(info["reviews"]),
       "commits" => info["pull"]["commits"],
-      "dharma" => dharma
+      "dharma" => dharma,
+      "closed_at" => info["pull"]["closed_at"],
+      "created_at" => info["pull"]["created_at"]
     }
   end
 
