@@ -13,9 +13,9 @@ defmodule Processor do
   Starts a connection to handle one input source named `name`.
   """
   def start_link(name) do
-    _rules = Database.get_rules() |> IO.inspect()
+    rules = Database.get_rules()
 
-    GenServer.start_link(__MODULE__, %{source: name}, [
+    GenServer.start_link(__MODULE__, %{source: name, rules: rules}, [
       {:name, String.to_atom("#{__MODULE__}.#{name}")}
     ])
   end
@@ -62,34 +62,16 @@ defmodule Processor do
 
   # Process the payload and send it to the correct topic.
   defp process_and_send(payload, meta, state) do
-    Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received")
-    msg_processed = process(payload)
-    # TODO: Dynamically select topics?
-    send("insert.processed.dharma", msg_processed, state.channel)
+    info = Jason.decode!(payload)
+    Logger.info("[#{meta.routing_key}] #{info["action_type"]}", label: "[x] Received")
+    action_json = process(info, state) |> Jason.encode!()
+    send("insert.processed.actions", action_json, state.channel)
   end
 
   # Processes the `message`, preparing it to be inserted in the processed queues.
   # Identity for now, will change later on!
-  @spec process(any) :: any
-  defp process(message) do
-    info = message |> Jason.decode!()
-
-    # TODO: criar a "estrutura de dados" para mandar para as rules
-    narrowed = %{
-      "number_of_lines" => info.pull["additions"],
-      # ver se vale a pena passar non_merged PR do extractor para o processor
-      "is_merged" => true,
-      "is_reviewed" =>
-        case info.reviews
-             |> Enum.filter(&(&1 != "COMMENTED"))
-             |> List.last() do
-          "APPROVED" -> :positive
-          "CHANGES_REQUESTED" -> :negative
-          _ -> :unreviewed
-        end
-    }
-
-    message
+  defp process(info, state) do
+    Processor.Action.to_action(info, state.rules)
   end
 
   # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.

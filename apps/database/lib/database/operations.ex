@@ -20,6 +20,7 @@ defmodule Database.Operations do
     case resp.body["docs"] do
       nil ->
         {:error, "No docs found"}
+
       docs ->
         docs
         |> Enum.flat_map(fn doc ->
@@ -36,7 +37,7 @@ defmodule Database.Operations do
   # TODO: Add sort by reward
   def get_rules() do
     body = %{selector: %{type: %{"$eq": "action"}}, fields: ["action", "rule_specific_details"]}
-    mango_query_url = @name_db <> "/_find"
+    mango_query_url = db_name() <> "/_find"
     {:ok, resp} = post_with_retry(mango_query_url, body)
 
     resp.body["docs"]

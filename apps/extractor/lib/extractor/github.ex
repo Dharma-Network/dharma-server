@@ -21,7 +21,15 @@ defmodule Extractor.Github do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(_opts) do
-    sources = Database.get_github_sources()
+    sources =
+      case Database.get_github_sources() do
+        {:error, error_msg} ->
+          Logger.critical(error_msg)
+          []
+
+        sources ->
+          sources
+      end
 
     GenServer.start_link(__MODULE__, %{source: sources}, [
       {:name, __MODULE__}
@@ -113,9 +121,6 @@ defmodule Extractor.Github do
 
   # Checks if a datetime is after the provided one.
   defp valid_time?(dt, from) do
-    IO.inspect(dt)
-    IO.inspect(from)
-    IO.inspect("--------------__")
     NaiveDateTime.compare(dt, from) == :gt
   end
 
