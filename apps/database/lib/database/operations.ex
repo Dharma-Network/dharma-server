@@ -48,13 +48,44 @@ defmodule Database.Operations do
   end
 
   # If the post fails then refresh the authentication and try again.
-  defp post_with_retry(path, body) do
+  def post_with_retry(path, body) do
     {:ok, resp} = post(client(), path, body)
 
     case resp.status do
       401 ->
         Database.Auth.refresh_auth()
         post_with_retry(path, body)
+
+      _ ->
+        {:ok, resp}
+    end
+  end
+
+  # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
+  def fetch_changes(since \\ "") do
+    query =
+      cond do
+        since == "" -> [feed: "longpoll", heartbeat: 1000]
+        true -> [feed: "longpoll", since: since, heartbeat: 1000]
+      end
+
+    {:ok, resp} = get_with_retry(db_name() <> "/_changes", query)
+
+    ids =
+      resp.body["results"]
+      |> Enum.map(& &1["id"])
+
+    {resp.body["last_seq"], ids}
+  end
+
+  # If the get fails then refresh the authentication and try again.
+  defp get_with_retry(path, query \\ []) do
+    {:ok, resp} = get(client(), path, query: query)
+
+    case resp.status do
+      401 ->
+        Database.Auth.refresh_auth()
+        get_with_retry(path, query)
 
       _ ->
         {:ok, resp}
@@ -72,7 +103,9 @@ defmodule Database.Operations do
 
   # Posts a document with the given body
   # TODO: Don't rely on couchdb UUID
-  def post(body) do
-    post_with_retry("/" <> db_name(), body)
+  def post_to_db(path \\ "", body) do
+    post_with_retry("/" <> db_name() <> "/" <> path, body)
   end
+
+
 end
