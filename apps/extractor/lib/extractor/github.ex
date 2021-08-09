@@ -29,11 +29,7 @@ defmodule Extractor.Github do
   end
 
   # Fetch pull time.
-  defp pull_time(:test, t) do
-    t
-  end
-
-  defp pull_time() do
+  defp pull_time do
     rate = @source <> "_extract_rate"
     time = Application.get_env(:extractor, String.to_atom(rate), @default_extract_rate)
     time * 60 * 1000

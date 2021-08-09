@@ -13,7 +13,7 @@ defmodule Database.Operations do
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
 
   # Fetches the github sources from the database.
-  def get_github_sources() do
+  def get_github_sources do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
     {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
 
