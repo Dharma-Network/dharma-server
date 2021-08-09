@@ -11,6 +11,8 @@ defmodule Extractor.Github do
   use GenServer
   require Logger
 
+  alias Tentacat.Pulls.Files
+
   @default_extract_rate 5
   @source "github"
 
@@ -115,7 +117,7 @@ defmodule Extractor.Github do
 
   # Filters relevant data from a pull request.
   def extract_relevant_data(pull, client, owner, repo) do
-    {_status, files, _resp} = Tentacat.Pulls.Files.list(client, owner, repo, pull["number"])
+    {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
 
     Enum.map(files, fn file ->
       %{filename: file["filename"], additions: file["additions"], status: file["status"]}
