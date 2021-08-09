@@ -20,6 +20,7 @@ defmodule Database.Operations do
     case resp.body["docs"] do
       nil ->
         {:error, "No docs found"}
+
       docs ->
         {:ok, extract_sources(docs)}
     end
