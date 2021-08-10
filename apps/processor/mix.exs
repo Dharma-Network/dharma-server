@@ -20,7 +20,7 @@ defmodule Processor.MixProject do
     [
       applications: [:amqp],
       mod: {Processor.Application, []},
-      extra_applications: [:lager, :logger, :amqp],
+      extra_applications: [:lager, :logger, :amqp, :database],
       env: [source: []]
     ]
   end
@@ -28,7 +28,8 @@ defmodule Processor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:amqp, "~> 1.0"}
+      {:amqp, "~> 1.0"},
+      {:database, in_umbrella: true}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true}

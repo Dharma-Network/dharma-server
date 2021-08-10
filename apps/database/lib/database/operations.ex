@@ -6,6 +6,8 @@ defmodule Database.Operations do
 
   defp db_url, do: Application.fetch_env!(:database, :url_db)
   defp db_name, do: Application.fetch_env!(:database, :name_db)
+  defp mango_query_url, do: db_name() <> "/_find"
+  defp changes_feed_url, do: db_name() <> "/_changes"
 
   plug(Tesla.Middleware.BaseUrl, db_url())
   plug(Tesla.Middleware.JSON)
@@ -14,8 +16,8 @@ defmodule Database.Operations do
 
   # Fetches the github sources from the database.
   def get_github_sources do
-    body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
-    {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
+    query = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
+    {:ok, resp} = post_with_retry(db_name() <> "/_find", query)
 
     case resp.body["docs"] do
       nil ->
@@ -37,14 +39,44 @@ defmodule Database.Operations do
     |> Enum.into(%{}, & &1)
   end
 
+  # Fetches the rules from the database.
+  def get_rules do
+    query = %{
+      selector: %{type: %{"$eq": "action_rules"}},
+      fields: ["action_type", "rule_specific_details"]
+    }
+
+    {:ok, resp} = post_with_retry(mango_query_url(), query)
+
+    resp.body["docs"]
+    |> Enum.map(fn rule ->
+      {rule["action_type"], rule["rule_specific_details"]}
+    end)
+    |> Enum.into(%{}, & &1)
+  end
+
   # If the post fails then refresh the authentication and try again.
-  defp post_with_retry(path, body) do
-    {:ok, resp} = post(client(), path, body)
+  def post_with_retry(path, body, query \\ []) do
+    {:ok, resp} = post(client(), path, body, query: query)
 
     case resp.status do
       401 ->
         Database.Auth.refresh_auth()
         post_with_retry(path, body)
+
+      _ ->
+        {:ok, resp}
+    end
+  end
+
+  # If the get fails then refresh the authentication and try again.
+  defp get_with_retry(path, query \\ []) do
+    {:ok, resp} = get(client(), path, query: query)
+
+    case resp.status do
+      401 ->
+        Database.Auth.refresh_auth()
+        get_with_retry(path, query)
 
       _ ->
         {:ok, resp}
@@ -60,9 +92,28 @@ defmodule Database.Operations do
     Tesla.client(middleware)
   end
 
+  # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
+  def fetch_changes do
+    query = [
+      feed: "longpoll",
+      since: "now",
+      heartbeat: 1000,
+      filter: "_selector",
+      include_docs: true
+    ]
+
+    body = %{
+      selector: %{type: %{"$eq": "action_rules"}}
+    }
+
+    {:ok, resp} = post_with_retry(changes_feed_url(), body, query)
+
+    resp.body["results"]
+  end
+
   # Posts a document with the given body
   # TO-DO: Don't rely on couchdb UUID
-  def post(body) do
-    post_with_retry("/" <> db_name(), body)
+  def post_to_db(path \\ "", body) do
+    post_with_retry("/" <> db_name() <> "/" <> path, body)
   end
 end

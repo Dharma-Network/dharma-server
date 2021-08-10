@@ -59,8 +59,9 @@ defmodule Loader do
   # Process the payload and send it to the correct topic.
   defp send_to_database(payload, meta) do
     Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
-    body = %{"topic" => meta.routing_key, "payload" => payload}
-    Database.post(body)
+
+    Jason.decode!(payload)
+    |> Database.post_to_db()
   end
 
   defp send_to_blockchain(_payload, _meta, _state) do

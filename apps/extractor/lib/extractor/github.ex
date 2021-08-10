@@ -11,7 +11,9 @@ defmodule Extractor.Github do
   use GenServer
   require Logger
 
+  alias Tentacat.Pulls.Commits
   alias Tentacat.Pulls.Files
+  alias Tentacat.Pulls.Reviews
 
   @default_extract_rate 5
   @source "github"
@@ -23,7 +25,15 @@ defmodule Extractor.Github do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(_opts) do
-    sources = Database.get_github_sources()
+    sources =
+      case Database.get_github_sources() do
+        {:error, error_msg} ->
+          Logger.critical(error_msg)
+          []
+
+        {:ok, sources} ->
+          sources
+      end
 
     GenServer.start_link(__MODULE__, %{source: sources}, [
       {:name, __MODULE__}
@@ -77,9 +87,7 @@ defmodule Extractor.Github do
 
       {pulls, resp} ->
         new_etag = retrieve_etag(resp)
-        valid = Enum.filter(pulls, &is_merged?(&1, state.client, owner, repo))
-
-        {new_etag, valid}
+        {new_etag, pulls}
 
       nil ->
         nil
@@ -100,7 +108,8 @@ defmodule Extractor.Github do
             {:ok, dt} = NaiveDateTime.from_iso8601(pull["closed_at"])
             valid_time?(dt, from)
           end)
-          |> Enum.map(fn x -> extract_relevant_data(x, client, owner, repo) end)
+          |> Enum.filter(&is_merged?(&1, client, owner, repo))
+          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo) end)
 
         {value, resp}
 
@@ -118,10 +127,22 @@ defmodule Extractor.Github do
   # Filters relevant data from a pull request.
   def extract_relevant_data(pull, client, owner, repo) do
     {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
+    {_status, reviews, _resp} = Reviews.list(client, owner, repo, pull["number"])
+    {_status, commits, _resp} = Commits.list(client, owner, repo, pull["number"])
 
-    Enum.map(files, fn file ->
-      %{filename: file["filename"], additions: file["additions"], status: file["status"]}
-    end)
+    %{
+      owner: owner,
+      repo: repo,
+      action_type: "pull_request",
+      pull: pull,
+      reviews: reviews,
+      files: files,
+      commits: commits
+    }
+
+    # Enum.map(files, fn file ->
+    # %{filename: file["filename"], additions: file["additions"], status: file["status"]}
+    # end)
   end
 
   # Retrieves the ETag from a response, will be needed when we implement conditional requests.
@@ -151,8 +172,11 @@ defmodule Extractor.Github do
 
         {new_state, data} ->
           data
-          |> Jason.encode!()
-          |> send(@source, state.channel)
+          |> Enum.each(fn pull_data ->
+            pull_data
+            |> Jason.encode!()
+            |> send(@source, state.channel)
+          end)
 
           new_state
       end
@@ -163,7 +187,7 @@ defmodule Extractor.Github do
 
   # Update DateTime and schedule pull.
   defp timer(state) do
-    date = NaiveDateTime.local_now()
+    date = DateTime.utc_now()
     Process.send_after(self(), :pull_data, pull_time())
     Map.put(state, :date, date)
   end

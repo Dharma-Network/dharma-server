@@ -3,19 +3,18 @@ defmodule Processor do
   require Logger
 
   @moduledoc """
-  A `Processor` handles info regarding one source of input.
-  It reads data from a queue, processes that same data and forwards it to processed queues.
+  A `Processor` reads data from input queues, processes that same data and forwards it to processed queues.
   """
 
   defp dharma_exchange, do: Application.fetch_env!(:processor, :rabbit_exchange)
 
   @doc """
-  Starts a connection to handle one input source named `name`.
+  Convenience method for starting a `Processor`.
   """
-  def start_link(name) do
-    GenServer.start_link(__MODULE__, %{source: name}, [
-      {:name, String.to_atom("#{__MODULE__}.#{name}")}
-    ])
+  def start_link(_opts) do
+    rules = Database.get_rules()
+
+    GenServer.start_link(__MODULE__, %{rules: rules}, [{:name, __MODULE__}])
   end
 
   @impl true
@@ -31,7 +30,7 @@ defmodule Processor do
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
-    create_queue(channel, "raw_input", ["insert.raw." <> state.source])
+    create_queue(channel, "raw_input", ["insert.raw.*"])
     create_queue(channel, "process_dashboard", ["insert.processed.*"])
 
     create_queue(channel, "process_blockchain", [
@@ -60,17 +59,16 @@ defmodule Processor do
 
   # Process the payload and send it to the correct topic.
   defp process_and_send(payload, meta, state) do
-    Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received")
-    msg_processed = process(payload)
-    # TO-DO: Dynamically select topics?
-    send("insert.processed.dharma", msg_processed, state.channel)
+    info = Jason.decode!(payload)
+    Logger.info("[#{meta.routing_key}] #{info["action_type"]}", label: "[x] Received")
+    action_json = process(info, state) |> Jason.encode!()
+    send("insert.processed.actions", action_json, state.channel)
   end
 
   # Processes the `message`, preparing it to be inserted in the processed queues.
   # Identity for now, will change later on!
-  @spec process(any) :: any
-  defp process(message) do
-    message
+  defp process(info, state) do
+    Processor.Action.to_action(info, state.rules)
   end
 
   # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.
@@ -83,5 +81,12 @@ defmodule Processor do
   @impl true
   def handle_info(_, state) do
     {:noreply, state}
+  end
+
+  @impl true
+  def handle_cast(:reload, state) do
+    Logger.info("Reloading rules on processor!")
+    rules = Database.get_rules()
+    {:noreply, Map.put(state, :rules, rules)}
   end
 end
