@@ -31,7 +31,7 @@ defmodule Extractor.Github do
           Logger.critical(error_msg)
           []
 
-        sources ->
+        {:ok, sources} ->
           sources
       end
 
