@@ -7,6 +7,7 @@ defmodule Database.Operations do
   defp db_url, do: Application.fetch_env!(:database, :url_db)
   defp db_name, do: Application.fetch_env!(:database, :name_db)
   defp mango_query_url, do: db_name() <> "/_find"
+  defp changes_feed_url, do: db_name() <> "/_changes"
 
   plug(Tesla.Middleware.BaseUrl, db_url())
   plug(Tesla.Middleware.JSON)
@@ -51,8 +52,8 @@ defmodule Database.Operations do
   end
 
   # If the post fails then refresh the authentication and try again.
-  def post_with_retry(path, body) do
-    {:ok, resp} = post(client(), path, body)
+  def post_with_retry(path, body, query \\ []) do
+    {:ok, resp} = post(client(), path, body, query: query)
 
     case resp.status do
       401 ->
@@ -65,21 +66,22 @@ defmodule Database.Operations do
   end
 
   # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
-  def fetch_changes(since \\ "") do
-    query =
-      if since == "" do
-        [feed: "longpoll", heartbeat: 1000]
-      else
-        [feed: "longpoll", since: since, heartbeat: 1000]
-      end
+  def fetch_changes do
+    query = [feed: "longpoll", since: "now", heartbeat: 1000, filter: "_selector"]
 
-    {:ok, resp} = get_with_retry(db_name() <> "/_changes", query)
+    body = %{
+      selector: %{type: %{"$eq": "action_rules"}}
+    }
+
+    {:ok, changes_resp} = post_with_retry(changes_feed_url(), body, query)
 
     ids =
-      resp.body["results"]
-      |> Enum.map(& &1["id"])
+      changes_resp.body["results"]
+      |> Enum.map(fn change -> %{id: change["id"]} end)
 
-    {resp.body["last_seq"], ids}
+    {:ok, resp} = post_to_db("_bulk_get", %{docs: ids})
+
+    resp.body["results"]
   end
 
   # If the get fails then refresh the authentication and try again.
