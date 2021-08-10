@@ -13,23 +13,28 @@ defmodule Database.Operations do
   adapter(Tesla.Adapter.Finch, name: FinchAdapter)
 
   # Fetches the github sources from the database.
-  def get_github_sources() do
+  def get_github_sources do
     body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
     {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
 
     case resp.body["docs"] do
       nil ->
         {:error, "No docs found"}
+
       docs ->
-        docs
-        |> Enum.flat_map(fn doc ->
-          Enum.map(doc["list_of_urls"], fn url ->
-            [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
-            {{owner, repo}, ""}
-          end)
-        end)
-        |> Enum.into(%{}, & &1)
+        {:ok, extract_sources(docs)}
     end
+  end
+
+  defp extract_sources(docs) do
+    docs
+    |> Enum.flat_map(fn doc ->
+      Enum.map(doc["list_of_urls"], fn url ->
+        [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
+        {{owner, repo}, ""}
+      end)
+    end)
+    |> Enum.into(%{}, & &1)
   end
 
   # If the post fails then refresh the authentication and try again.
@@ -56,7 +61,7 @@ defmodule Database.Operations do
   end
 
   # Posts a document with the given body
-  # TODO: Don't rely on couchdb UUID
+  # TO-DO: Don't rely on couchdb UUID
   def post(body) do
     post_with_retry("/" <> db_name(), body)
   end

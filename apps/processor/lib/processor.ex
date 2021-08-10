@@ -62,7 +62,7 @@ defmodule Processor do
   defp process_and_send(payload, meta, state) do
     Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received")
     msg_processed = process(payload)
-    # TODO: Dynamically select topics?
+    # TO-DO: Dynamically select topics?
     send("insert.processed.dharma", msg_processed, state.channel)
   end
 

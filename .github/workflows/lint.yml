@@ -1,0 +1,26 @@
+name: Lint
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "24.0.4"
+          elixir-version: "1.12.2"
+      - uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: MIX_ENV=test mix deps.get
+      - run: MIX_ENV=test mix credo --strict
+      - run: MIX_ENV=test mix format --check-formatted
