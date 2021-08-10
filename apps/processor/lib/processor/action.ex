@@ -1,10 +1,19 @@
 defmodule Processor.Action do
+  @moduledoc """
+  This is the `Action` module.
+  This module receives action info and rules and this information generates an action structure.                                
+  """
+
+  @doc """
+  Transforms information based on action types to an action structure.
+  """
   def to_action(info, rules) do
     case info["action_type"] do
       "pull_request" -> pull_request_to_action(info, rules["pull_request"])
     end
   end
 
+  # Serialize a pull_request action type to an action structure.
   defp pull_request_to_action(info, rules) do
     dharma = Processor.Rating.rate_pull_request(info, rules)
 
@@ -24,6 +33,7 @@ defmodule Processor.Action do
     }
   end
 
+  # Based on review value checks if it was reviewed or not.
   defp evaluate_reviews(reviews) do
     case reviews
          |> Enum.filter(&(&1 != "COMMENTED"))
