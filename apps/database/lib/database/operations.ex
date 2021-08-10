@@ -3,6 +3,7 @@ defmodule Database.Operations do
   Module that contains all database operations we provide.
   """
   use Tesla
+  require Logger
 
   defp db_url, do: Application.fetch_env!(:database, :url_db)
   defp db_name, do: Application.fetch_env!(:database, :name_db)
@@ -16,15 +17,25 @@ defmodule Database.Operations do
 
   # Fetches the github sources from the database.
   def get_github_sources do
-    query = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
-    {:ok, resp} = post_with_retry(db_name() <> "/_find", query)
+    query = %{
+      selector: %{project_type: %{"$eq": "github"}, type: %{"$eq": "project"}},
+      fields: ["list_of_urls"]
+    }
 
-    case resp.body["docs"] do
-      nil ->
-        {:error, "No docs found"}
+    case post_with_retry(db_name() <> "/_find", query) do
+      {:ok, resp} ->
+        case resp.body["docs"] do
+          nil ->
+            Logger.critical("No docs found")
+            {:error, %{}}
 
-      docs ->
-        {:ok, extract_sources(docs)}
+          docs ->
+            {:ok, extract_sources(docs)}
+        end
+
+      {:error, _reason} ->
+        Logger.critical("No docs found")
+        {:error, %{}}
     end
   end
 
@@ -46,40 +57,40 @@ defmodule Database.Operations do
       fields: ["action_type", "rule_specific_details"]
     }
 
-    {:ok, resp} = post_with_retry(mango_query_url(), query)
+    case post_with_retry(mango_query_url(), query) do
+      {:ok, resp} ->
+        case resp.body["docs"] do
+          nil ->
+            %{}
 
-    resp.body["docs"]
-    |> Enum.map(fn rule ->
-      {rule["action_type"], rule["rule_specific_details"]}
-    end)
-    |> Enum.into(%{}, & &1)
-  end
+          res ->
+            res
+            |> Enum.map(fn rule ->
+              {rule["action_type"], rule["rule_specific_details"]}
+            end)
+            |> Enum.into(%{}, & &1)
+        end
 
-  # If the post fails then refresh the authentication and try again.
-  def post_with_retry(path, body, query \\ []) do
-    {:ok, resp} = post(client(), path, body, query: query)
-
-    case resp.status do
-      401 ->
-        Database.Auth.refresh_auth()
-        post_with_retry(path, body)
-
-      _ ->
-        {:ok, resp}
+      {:error, _reason} ->
+        Logger.critical("Error while trying to execute post_with_retry")
+        %{}
     end
   end
 
-  # If the get fails then refresh the authentication and try again.
-  defp get_with_retry(path, query \\ []) do
-    {:ok, resp} = get(client(), path, query: query)
+  # If the post fails then refresh the authentication and try again.
+  defp post_with_retry(path, body, query \\ []) do
+    with {:ok, resp} <- post(client(), path, body, query: query) do
+      case resp.status do
+        401 ->
+          Database.Auth.refresh_auth()
+          post_with_retry(path, body)
 
-    case resp.status do
-      401 ->
-        Database.Auth.refresh_auth()
-        get_with_retry(path, query)
-
-      _ ->
-        {:ok, resp}
+        _ ->
+          {:ok, resp}
+      end
+    else
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -106,14 +117,28 @@ defmodule Database.Operations do
       selector: %{type: %{"$eq": "action_rules"}}
     }
 
-    {:ok, resp} = post_with_retry(changes_feed_url(), body, query)
+    case post_with_retry(changes_feed_url(), body, query) do
+      {:ok, resp} ->
+        resp.body["results"]
 
-    resp.body["results"]
+      {:error, reason} ->
+        Logger.critical("Error in fetch_changes with the
+             following reason: " <> reason)
+        []
+    end
   end
 
   # Posts a document with the given body
   # TO-DO: Don't rely on couchdb UUID
   def post_to_db(path \\ "", body) do
-    post_with_retry("/" <> db_name() <> "/" <> path, body)
+    case post_with_retry("/" <> db_name() <> "/" <> path, body) do
+      {:ok, _resp} ->
+        :ok
+
+      {:error, reason} ->
+        Logger.critical("Error in post_to_db with the
+             following reason: " <> reason)
+        :fail
+    end
   end
 end
