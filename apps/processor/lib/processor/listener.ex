@@ -23,7 +23,7 @@ defmodule Processor.Listener do
     {last_seq, ids} = Database.fetch_changes(state.seq)
     new_state = Map.put(state, :seq, last_seq)
 
-    # TODO: Find a better way of getting all children (probably through Supervisor.which_children)
+    # TO-DO: Find a better way of getting all children (probably through Supervisor.which_children)
     if any_rule?(ids) do
       GenServer.cast(Processor, :reload)
     end

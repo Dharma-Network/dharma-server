@@ -6,6 +6,7 @@ defmodule Database.Operations do
 
   defp db_url, do: Application.fetch_env!(:database, :url_db)
   defp db_name, do: Application.fetch_env!(:database, :name_db)
+  defp mango_query_url, do: db_name() <> "/_find"
 
   plug(Tesla.Middleware.BaseUrl, db_url())
   plug(Tesla.Middleware.JSON)
@@ -34,15 +35,13 @@ defmodule Database.Operations do
   end
 
   # Fetches the rules from the database.
-  # TODO: Add sort by reward
   def get_rules() do
     body = %{
       selector: %{type: %{"$eq": "action_rules"}},
       fields: ["action_type", "rule_specific_details"]
     }
 
-    mango_query_url = db_name() <> "/_find"
-    {:ok, resp} = post_with_retry(mango_query_url, body)
+    {:ok, resp} = post_with_retry(mango_query_url(), body)
 
     resp.body["docs"]
     |> Enum.map(fn rule ->
@@ -68,9 +67,10 @@ defmodule Database.Operations do
   # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
   def fetch_changes(since \\ "") do
     query =
-      cond do
-        since == "" -> [feed: "longpoll", heartbeat: 1000]
-        true -> [feed: "longpoll", since: since, heartbeat: 1000]
+      if since == "" do
+        [feed: "longpoll", heartbeat: 1000]
+      else
+        [feed: "longpoll", since: since, heartbeat: 1000]
       end
 
     {:ok, resp} = get_with_retry(db_name() <> "/_changes", query)
@@ -106,7 +106,7 @@ defmodule Database.Operations do
   end
 
   # Posts a document with the given body
-  # TODO: Don't rely on couchdb UUID
+  # TO-DO: Don't rely on couchdb UUID
   def post_to_db(path \\ "", body) do
     post_with_retry("/" <> db_name() <> "/" <> path, body)
   end
