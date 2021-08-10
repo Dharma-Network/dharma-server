@@ -12,6 +12,8 @@ defmodule Extractor.Github do
   require Logger
 
   alias Tentacat.Pulls.Files
+  alias Tentacat.Pulls.Commits
+  alias Tentacat.Pulls.Reviews
 
   @default_extract_rate 5
   @source "github"
