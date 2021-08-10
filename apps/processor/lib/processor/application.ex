@@ -6,6 +6,7 @@ defmodule Processor.Application do
   @impl true
   def start(_type, _args) do
     opts = [strategy: :one_for_one, name: Processor.Supervisor]
+
     children = [
       {Processor, []},
       {Processor.Listener, []}

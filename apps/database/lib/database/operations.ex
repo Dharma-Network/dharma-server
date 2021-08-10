@@ -27,7 +27,7 @@ defmodule Database.Operations do
         {:ok, extract_sources(docs)}
     end
   end
-  
+
   defp extract_sources(docs) do
     docs
     |> Enum.flat_map(fn doc ->
@@ -38,9 +38,9 @@ defmodule Database.Operations do
     end)
     |> Enum.into(%{}, & &1)
   end
-  
+
   # Fetches the rules from the database.
-  def get_rules() do
+  def get_rules do
     body = %{
       selector: %{type: %{"$eq": "action_rules"}},
       fields: ["action_type", "rule_specific_details"]

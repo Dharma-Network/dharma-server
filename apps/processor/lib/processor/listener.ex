@@ -27,7 +27,7 @@ defmodule Processor.Listener do
   end
 
   # Could this be improved?
-  defp schedule_fetch() do
+  defp schedule_fetch do
     Process.send_after(self(), :fetch, 1000)
   end
 end
