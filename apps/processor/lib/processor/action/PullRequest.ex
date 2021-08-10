@@ -1,0 +1,39 @@
+defmodule Processor.RulesAction.PullRequest do
+  @moduledoc """
+  This is an `Action` module.
+  This module receives action info and rules and this information generates an action structure.
+  """
+
+  alias Processor.Rating
+
+  # Serialize a pull_request action type to an action structure.
+  def pull_request(info, rules) do
+    dharma = Rating.PullRequest.rate(info, rules)
+
+    %{
+      "type" => "action",
+      "action_type" => info["action_type"],
+      "owner" => info["owner"],
+      "repo" => info["repo"],
+      "title" => info["pull"]["title"],
+      "number_of_lines" => info["pull"]["additions"],
+      "user" => info["pull"]["user"]["login"],
+      "is_reviewed" => evaluate_reviews(info["reviews"]),
+      "commits" => info["pull"]["commits"],
+      "dharma" => dharma,
+      "closed_at" => info["pull"]["closed_at"],
+      "created_at" => info["pull"]["created_at"]
+    }
+  end
+
+  # Based on review value checks if it was reviewed or not.
+  defp evaluate_reviews(reviews) do
+    case reviews
+         |> Enum.filter(&(&1 != "COMMENTED"))
+         |> List.last() do
+      "APPROVED" -> "Reviewed"
+      "CHANGES_REQUESTED" -> "Changes Requested and not added"
+      _ -> "Unreviewed"
+    end
+  end
+end

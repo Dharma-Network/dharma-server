@@ -1,12 +1,12 @@
-defmodule Processor.Rating do
+defmodule Processor.Rating.PullRequest do
   @moduledoc """
-  This module rates actions.
+  This module rates pull request actions.
   """
 
   @doc """
   Rates a pull request by extracting the relevant data from it and evaluating the latter.
   """
-  def rate_pull_request(info, rules) do
+  def rate(info, rules) do
     {dharma, _rewards} =
       %{
         "number_of_lines" => info["pull"]["additions"],
@@ -27,16 +27,5 @@ defmodule Processor.Rating do
       "CHANGES_REQUESTED" -> :negative
       _ -> :unreviewed
     end
-  end
-
-  def rate_instagram_post(info, rules) do
-    {dharma, _rewards} =
-      %{
-        "number_of_stories" => info["post"]["stories"],
-        "is_reviewed_instagram" => info["post"]["reviewed"]
-      }
-      |> Processor.Rules.evaluate_rules(rules)
-
-    dharma
   end
 end
