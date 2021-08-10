@@ -39,5 +39,4 @@ defmodule Processor.Rating do
 
     dharma
   end
-
 end

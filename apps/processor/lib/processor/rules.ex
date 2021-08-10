@@ -23,6 +23,7 @@ defmodule Processor.Rules do
 
   def is_merged(merge_status, reward_maps) do
     id = {"is_merged", merge_status}
+
     case merge_status do
       true -> {id, reward_maps["merged"]}
       _ -> {id, reward_maps["not_merged"]}
@@ -31,6 +32,7 @@ defmodule Processor.Rules do
 
   def is_reviewed_instagram(review_status, reward_maps) do
     id = {"is_reviewed_instagram", review_status}
+
     if review_status do
       {id, reward_maps["is_reviewed"]}
     else
