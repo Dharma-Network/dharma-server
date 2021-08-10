@@ -1,4 +1,4 @@
-defmodule Processor.Action do
+defmodule Processor.RulesAction do
   @moduledoc """
   This is the `Action` module.
   This module receives action info and rules and this information generates an action structure.

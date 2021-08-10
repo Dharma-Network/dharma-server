@@ -16,8 +16,8 @@ defmodule Database.Operations do
 
   # Fetches the github sources from the database.
   def get_github_sources do
-    body = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
-    {:ok, resp} = post_with_retry(db_name() <> "/_find", body)
+    query = %{selector: %{project_type: %{"$eq": "github"}}, fields: ["list_of_urls"]}
+    {:ok, resp} = post_with_retry(db_name() <> "/_find", query)
 
     case resp.body["docs"] do
       nil ->
@@ -41,12 +41,12 @@ defmodule Database.Operations do
 
   # Fetches the rules from the database.
   def get_rules do
-    body = %{
+    query = %{
       selector: %{type: %{"$eq": "action_rules"}},
       fields: ["action_type", "rule_specific_details"]
     }
 
-    {:ok, resp} = post_with_retry(mango_query_url(), body)
+    {:ok, resp} = post_with_retry(mango_query_url(), query)
 
     resp.body["docs"]
     |> Enum.map(fn rule ->
@@ -67,25 +67,6 @@ defmodule Database.Operations do
       _ ->
         {:ok, resp}
     end
-  end
-
-  # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
-  def fetch_changes do
-    query = [feed: "longpoll", since: "now", heartbeat: 1000, filter: "_selector"]
-
-    body = %{
-      selector: %{type: %{"$eq": "action_rules"}}
-    }
-
-    {:ok, changes_resp} = post_with_retry(changes_feed_url(), body, query)
-
-    ids =
-      changes_resp.body["results"]
-      |> Enum.map(fn change -> %{id: change["id"]} end)
-
-    {:ok, resp} = post_to_db("_bulk_get", %{docs: ids})
-
-    resp.body["results"]
   end
 
   # If the get fails then refresh the authentication and try again.
@@ -109,6 +90,25 @@ defmodule Database.Operations do
     ]
 
     Tesla.client(middleware)
+  end
+
+  # Returns the changes since the provided point, giving back the last_seq and the ids of the documents introduced.
+  def fetch_changes do
+    query = [
+      feed: "longpoll",
+      since: "now",
+      heartbeat: 1000,
+      filter: "_selector",
+      include_docs: true
+    ]
+
+    body = %{
+      selector: %{type: %{"$eq": "action_rules"}}
+    }
+
+    {:ok, resp} = post_with_retry(changes_feed_url(), body, query)
+
+    resp.body["results"]
   end
 
   # Posts a document with the given body
