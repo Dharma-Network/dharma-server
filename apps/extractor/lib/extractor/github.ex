@@ -11,6 +11,8 @@ defmodule Extractor.Github do
   use GenServer
   require Logger
 
+  alias Tentacat.Pulls.Files
+
   @default_extract_rate 5
   @source "github"
 
@@ -37,11 +39,7 @@ defmodule Extractor.Github do
   end
 
   # Fetch pull time.
-  defp pull_time(:test, t) do
-    t
-  end
-
-  defp pull_time() do
+  defp pull_time do
     rate = @source <> "_extract_rate"
     time = Application.get_env(:extractor, String.to_atom(rate), @default_extract_rate)
     time * 60 * 1000
@@ -126,9 +124,9 @@ defmodule Extractor.Github do
 
   # Filters relevant data from a pull request.
   def extract_relevant_data(pull, client, owner, repo) do
-    {_status, files, _resp} = Tentacat.Pulls.Files.list(client, owner, repo, pull["number"])
-    {_status, reviews, _resp} = Tentacat.Pulls.Reviews.list(client, owner, repo, pull["number"])
-    {_status, commits, _resp} = Tentacat.Pulls.Commits.list(client, owner, repo, pull["number"])
+    {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
+    {_status, reviews, _resp} = Reviews.list(client, owner, repo, pull["number"])
+    {_status, commits, _resp} = Commits.list(client, owner, repo, pull["number"])
 
     %{
       owner: owner,
