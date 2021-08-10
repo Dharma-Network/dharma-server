@@ -28,4 +28,16 @@ defmodule Processor.Rating do
       _ -> :unreviewed
     end
   end
+
+  def rate_instagram_post(info, rules) do
+    {dharma, _rewards} =
+      %{
+        "number_of_stories" => info["post"]["stories"],
+        "is_reviewed_instagram" => info["post"]["reviewed"]
+      }
+      |> Processor.Rules.evaluate_rules(rules)
+
+    dharma
+  end
+
 end

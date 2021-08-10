@@ -1,7 +1,7 @@
 defmodule Processor.Action do
   @moduledoc """
   This is the `Action` module.
-  This module receives action info and rules and this information generates an action structure.                                
+  This module receives action info and rules and this information generates an action structure.
   """
 
   @doc """
@@ -10,7 +10,21 @@ defmodule Processor.Action do
   def to_action(info, rules) do
     case info["action_type"] do
       "pull_request" -> pull_request_to_action(info, rules["pull_request"])
+      "instagram_action" -> instagram_post_to_action(info, rules["instagram_action"])
     end
+  end
+
+  defp instagram_post_to_action(info, rules) do
+    dharma = Processor.Rating.rate_instagram_post(info, rules)
+
+    %{
+      "type" => "action",
+      "action_type" => info["action_type"],
+      "title" => info["post"]["title"],
+      "user" => info["post"]["user"],
+      "stories" => info["post"]["stories"],
+      "dharma" => dharma
+    }
   end
 
   # Serialize a pull_request action type to an action structure.
@@ -19,7 +33,7 @@ defmodule Processor.Action do
 
     %{
       "type" => "action",
-      "action_type" => "pull_request",
+      "action_type" => info["action_type"],
       "owner" => info["owner"],
       "repo" => info["repo"],
       "title" => info["pull"]["title"],
