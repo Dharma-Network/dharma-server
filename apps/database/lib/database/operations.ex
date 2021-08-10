@@ -64,11 +64,7 @@ defmodule Database.Operations do
             %{}
 
           res ->
-            res
-            |> Enum.map(fn rule ->
-              {rule["action_type"], rule["rule_specific_details"]}
-            end)
-            |> Enum.into(%{}, & &1)
+            extract_rules(res)
         end
 
       {:error, _reason} ->
@@ -77,18 +73,27 @@ defmodule Database.Operations do
     end
   end
 
+  defp extract_rules(res) do
+    res
+    |> Enum.map(fn rule ->
+      {rule["action_type"], rule["rule_specific_details"]}
+    end)
+    |> Enum.into(%{}, & &1)
+  end
+
   # If the post fails then refresh the authentication and try again.
   defp post_with_retry(path, body, query \\ []) do
-    with {:ok, resp} <- post(client(), path, body, query: query) do
-      case resp.status do
-        401 ->
-          Database.Auth.refresh_auth()
-          post_with_retry(path, body)
+    case post(client(), path, body, query: query) do
+      {:ok, resp} ->
+        case resp.status do
+          401 ->
+            Database.Auth.refresh_auth()
+            post_with_retry(path, body)
 
-        _ ->
-          {:ok, resp}
-      end
-    else
+          _ ->
+            {:ok, resp}
+        end
+
       {:error, reason} ->
         {:error, reason}
     end
