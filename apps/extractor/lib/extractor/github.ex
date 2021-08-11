@@ -79,8 +79,8 @@ defmodule Extractor.Github do
   defp fetch(state) do
     # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
-      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, {map, list} ->
-        case fetch(state, owner, repo, etag) do
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo, proj_id}, etag}, acc = {map, list} ->
+        case fetch(state, owner, repo, proj_id, etag) do
           {new_etag, value} ->
             {Map.put(map, {owner, repo}, new_etag), [value | list]}
 
@@ -93,12 +93,12 @@ defmodule Extractor.Github do
   end
 
   # Fetches recent pulls.
-  defp fetch(state, owner, repo, etag) do
+  defp fetch(state, owner, repo, proj_id, etag) do
     # Set a extra header to contain the etag header (only if it's not empty)
     Logger.info("#{owner} #{repo}", label: "fetching from ")
     Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
 
-    case efficient_pulling(state.client, owner, repo, state.date) do
+    case efficient_pulling(state.client, owner, repo, state.date, proj_id) do
       {[], _resp} ->
         nil
 
@@ -113,7 +113,7 @@ defmodule Extractor.Github do
 
   # Obtain pulls sorted by most recent closed order.
   # We use take_while to avoid going through any pull that's before from.
-  defp efficient_pulling(client, owner, repo, from) do
+  defp efficient_pulling(client, owner, repo, from, proj_id) do
     filters = %{state: "closed", sort: "updated", direction: "desc"}
 
     case Tentacat.Pulls.filter(client, owner, repo, filters) do
@@ -126,7 +126,7 @@ defmodule Extractor.Github do
             valid_time?(dt, from)
           end)
           |> Enum.filter(&is_merged?(&1, client, owner, repo))
-          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo) end)
+          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo, proj_id) end)
 
         {value, resp}
 
@@ -142,12 +142,13 @@ defmodule Extractor.Github do
   end
 
   # Filters relevant data from a pull request.
-  defp extract_relevant_data(pull, client, owner, repo) do
+  def extract_relevant_data(pull, client, owner, repo, proj_id) do
     {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
     {_status, reviews, _resp} = Reviews.list(client, owner, repo, pull["number"])
     {_status, commits, _resp} = Commits.list(client, owner, repo, pull["number"])
 
     %{
+      proj_id: proj_id,
       owner: owner,
       repo: repo,
       action_type: "pull_request",
