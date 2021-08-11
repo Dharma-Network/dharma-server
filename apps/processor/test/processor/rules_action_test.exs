@@ -1,7 +1,7 @@
-defmodule ActionTest do
+defmodule RulesActionTest do
   use ExUnit.Case
   require Logger
-  doctest Processor.Action
+  doctest Processor.RulesAction
 
   test "Examplify processing an instagram action" do
     info = %{
@@ -21,7 +21,7 @@ defmodule ActionTest do
       }
     }
 
-    action = Processor.Action.to_action(info, rules)
+    action = Processor.RulesAction.to_action(info, rules)
 
     Logger.info(inspect(action))
 
