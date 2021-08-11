@@ -25,19 +25,7 @@ defmodule Extractor.Github do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(_opts) do
-    sources =
-      case Database.get_github_sources() do
-        {:error, error_msg} ->
-          Logger.critical(error_msg)
-          []
-
-        {:ok, sources} ->
-          sources
-      end
-
-    GenServer.start_link(__MODULE__, %{source: sources}, [
-      {:name, __MODULE__}
-    ])
+    GenServer.start_link(__MODULE__, %{}, [{:name, __MODULE__}])
   end
 
   # Fetch pull time.
@@ -51,28 +39,43 @@ defmodule Extractor.Github do
   Callbacks for GenServer.Behaviour.
   """
   @impl true
-  def init(state) do
-    new_state = start_connection(state)
-    github_token = Application.get_env(:extractor, :github_token)
-    client = Tentacat.Client.new(%{access_token: github_token})
-    new_state = timer(Map.put(new_state, :client, client))
+  def init(_state) do
+    state = build_state()
+    new_state = timer(state)
     {:ok, new_state}
   end
 
-  defp fetch(state) do
+  def build_state do
+    sources =
+      case Database.get_github_sources() do
+        {:error, error_msg} ->
+          Logger.critical(error_msg)
+          []
+
+        {:ok, sources} ->
+          sources
+      end
+
+    conn = Extractor.Github.start_connection()
+    github_token = Application.get_env(:extractor, :github_token)
+    client = Tentacat.Client.new(%{access_token: github_token})
+    Map.merge(%{client: client, source: sources}, conn)
+  end
+
+  def fetch(state) do
     # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
-      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, acc = {map, list} ->
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, {map, list} ->
         case fetch(state, owner, repo, etag) do
           {new_etag, value} ->
             {Map.put(map, {owner, repo}, new_etag), [value | list]}
 
           nil ->
-            acc
+            {Map.put(map, {owner, repo}, etag), list}
         end
       end)
 
-    {Map.put(state, :source, new_sources), data}
+    {Map.put(state, :source, new_sources), Enum.concat(data)}
   end
 
   # Fetches recent pulls.
@@ -139,10 +142,6 @@ defmodule Extractor.Github do
       files: files,
       commits: commits
     }
-
-    # Enum.map(files, fn file ->
-    # %{filename: file["filename"], additions: file["additions"], status: file["status"]}
-    # end)
   end
 
   # Retrieves the ETag from a response, will be needed when we implement conditional requests.
@@ -201,13 +200,13 @@ defmodule Extractor.Github do
   end
 
   # Start a connection with RabbitMQ and declare an exchange.
-  defp start_connection(state) do
+  def start_connection() do
     url = Application.fetch_env!(:extractor, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
-    Map.merge(state, %{connection: connection, channel: channel})
-  end
+    %{connection: connection, channel: channel}
+ end
 
   # Publishes a message to an Exchange.
   @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
