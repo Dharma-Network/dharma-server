@@ -24,8 +24,6 @@ defmodule Database.Operations do
 
     case post_with_retry(db_name() <> "/_find", query) do
       {:ok, resp} ->
-        IO.inspect(resp)
-
         case resp.body["docs"] do
           nil ->
             Logger.critical("No docs found")
