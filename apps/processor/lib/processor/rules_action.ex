@@ -37,10 +37,10 @@ defmodule Processor.RulesAction do
       "owner" => info["owner"],
       "repo" => info["repo"],
       "title" => info["pull"]["title"],
-      "number_of_lines" => info["pull"]["additions"],
+      "number_of_lines" => Enum.map(info["files"], & &1["additions"]) |> Enum.sum(),
       "user" => info["pull"]["user"]["login"],
       "is_reviewed" => evaluate_reviews(info["reviews"]),
-      "commits" => info["pull"]["commits"],
+      "commits" => length(info["commits"]),
       "dharma" => dharma,
       "closed_at" => info["pull"]["closed_at"],
       "created_at" => info["pull"]["created_at"]

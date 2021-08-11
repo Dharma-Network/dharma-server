@@ -45,7 +45,7 @@ defmodule Extractor.Github do
     {:ok, new_state}
   end
 
-  def build_state do
+  defp build_state do
     sources =
       case Database.get_github_sources() do
         {:error, error_msg} ->
@@ -62,7 +62,21 @@ defmodule Extractor.Github do
     Map.merge(%{client: client, source: sources}, conn)
   end
 
-  def fetch(state) do
+  @doc """
+  Calls the :fetch_from endpoint with the provided date.
+  """
+  @spec fetch_from(String.t()) :: :ok
+  def fetch_from(date) do
+    case NaiveDateTime.from_iso8601(date) do
+      {:ok, ndt} ->
+        GenServer.cast(__MODULE__, {:fetch_from, ndt})
+
+      {:error, reason} ->
+        Logger.info("Failed to convert #{date} because #{reason}.")
+    end
+  end
+
+  defp fetch(state) do
     # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
       Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, {map, list} ->
@@ -128,7 +142,7 @@ defmodule Extractor.Github do
   end
 
   # Filters relevant data from a pull request.
-  def extract_relevant_data(pull, client, owner, repo) do
+  defp extract_relevant_data(pull, client, owner, repo) do
     {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
     {_status, reviews, _resp} = Reviews.list(client, owner, repo, pull["number"])
     {_status, commits, _resp} = Commits.list(client, owner, repo, pull["number"])
@@ -184,6 +198,25 @@ defmodule Extractor.Github do
     {:noreply, new_state}
   end
 
+  @impl true
+  def handle_cast({:fetch_from, date}, state) do
+    hacked = Map.put(state, :date, date)
+    data = elem(fetch(hacked), 1)
+
+    if data != [] do
+      Enum.each(data, fn pull_data ->
+        pull_data
+        |> Jason.encode!()
+        |> send(@source, state.channel)
+
+        info = pull_data.pull
+        Logger.info(info["url"] <> ": " <> info["title"])
+      end)
+    end
+
+    {:noreply, state}
+  end
+
   # Update DateTime and schedule pull.
   defp timer(state) do
     date = DateTime.utc_now()
@@ -213,7 +246,6 @@ defmodule Extractor.Github do
   defp send(message, source, channel) do
     topic = "insert.raw." <> source
     AMQP.Basic.publish(channel, dharma_exchange(), topic, message, persistent: true)
-    Logger.info("[#{topic}] #{message}", label: "[x] Sent")
   end
 
   # Close RabbitMQ connection.
