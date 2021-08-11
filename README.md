@@ -31,6 +31,7 @@ Now run the app:
 ### Other useful commands
 
 - `mix test` --> Run tests
+- `mix docs` --> Generate documentation
 
 ## Project architecture
 

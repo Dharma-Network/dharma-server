@@ -16,7 +16,13 @@ defmodule DharmaServer.MixProject do
             processor: :permanent
           ]
         ]
-      ]
+      ],
+      # Docs
+      name: "Dharma Server",
+      source_url: "https://github.com/Dharma-Network/dharma-server",
+      docs: [
+        main: "api-reference"
+      ],
     ]
   end
 
@@ -28,7 +34,10 @@ defmodule DharmaServer.MixProject do
   defp deps do
     [
       {:amqp, "~> 1.0"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+
+      # ---- Test and Dev
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.24", only: :dev, runtime: false}
     ]
   end
 end
