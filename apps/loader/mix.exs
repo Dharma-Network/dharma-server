@@ -18,7 +18,7 @@ defmodule Loader.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:lager, :logger, :amqp, :database],
+      extra_applications: [:crypto, :lager, :logger, :amqp, :database, :elixir_uuid],
       applications: [:amqp, :jason],
       mod: {Loader.Application, []}
     ]
@@ -29,7 +29,8 @@ defmodule Loader.MixProject do
     [
       {:jason, "~> 1.2"},
       {:amqp, "~> 1.0"},
-      {:database, in_umbrella: true}
+      {:database, in_umbrella: true},
+      {:elixir_uuid, "~> 1.2"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]

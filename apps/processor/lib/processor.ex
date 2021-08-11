@@ -68,7 +68,7 @@ defmodule Processor do
   # Processes the `message`, preparing it to be inserted in the processed queues.
   # Identity for now, will change later on!
   defp process(info, state) do
-    Processor.Action.to_action(info, state.rules)
+    Processor.RulesAction.to_action(info, state.rules)
   end
 
   # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.
