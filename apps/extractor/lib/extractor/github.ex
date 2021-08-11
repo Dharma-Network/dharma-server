@@ -206,7 +206,7 @@ defmodule Extractor.Github do
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
     %{connection: connection, channel: channel}
- end
+  end
 
   # Publishes a message to an Exchange.
   @spec send(String.t(), String.t(), AMQP.Channel.t()) :: :ok
