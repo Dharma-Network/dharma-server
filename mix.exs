@@ -22,7 +22,7 @@ defmodule DharmaServer.MixProject do
       source_url: "https://github.com/Dharma-Network/dharma-server",
       docs: [
         main: "api-reference"
-      ],
+      ]
     ]
   end
 
