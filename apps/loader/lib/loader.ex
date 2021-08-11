@@ -61,7 +61,7 @@ defmodule Loader do
     Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
 
     Jason.decode!(payload)
-    |> Map.put("uuid", UUID.uuid1())
+    |> Map.put("_id", UUID.uuid1())
     |> Database.post_to_db()
   end
 

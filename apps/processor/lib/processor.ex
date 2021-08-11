@@ -76,7 +76,6 @@ defmodule Processor do
   @spec send(String.t(), any, AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
     AMQP.Basic.publish(channel, dharma_exchange(), topic, message)
-    Logger.info("[#{topic}] #{message}", label: "[x] Sent ")
   end
 
   @impl true

@@ -124,7 +124,13 @@ defmodule Database.Operations do
 
     case post_with_retry(changes_feed_url(), body, query) do
       {:ok, resp} ->
-        resp.body["results"]
+        case resp.body["results"] do
+          nil ->
+            []
+
+          res ->
+            res
+        end
 
       {:error, reason} ->
         Logger.critical("Error in fetch_changes with the
