@@ -200,7 +200,7 @@ defmodule Extractor.Github do
   end
 
   # Start a connection with RabbitMQ and declare an exchange.
-  def start_connection() do
+  def start_connection do
     url = Application.fetch_env!(:extractor, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
