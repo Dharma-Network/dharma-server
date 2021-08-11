@@ -79,7 +79,7 @@ defmodule Extractor.Github do
   defp fetch(state) do
     # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
-      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo, proj_id}, etag}, acc = {map, list} ->
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo, proj_id}, etag}, {map, list} ->
         case fetch(state, owner, repo, proj_id, etag) do
           {new_etag, value} ->
             {Map.put(map, {owner, repo}, new_etag), [value | list]}
