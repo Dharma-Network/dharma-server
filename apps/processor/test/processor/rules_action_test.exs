@@ -16,7 +16,7 @@ defmodule RulesActionTest do
 
     rules = %{
       "instagram_action" => %{
-        "is_reviewed_instagram" => %{"is_reviewed" => 20, "not_reviewed" => 0},
+        "is_reviewed" => %{"is_reviewed" => 20, "not_reviewed" => 0},
         "number_of_stories" => %{"1" => 50, "2" => 100, "4" => 200}
       }
     }

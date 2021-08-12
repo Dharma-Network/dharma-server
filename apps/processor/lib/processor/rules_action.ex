@@ -8,70 +8,9 @@ defmodule Processor.RulesAction do
   Transforms information based on action types to an action structure.
   """
   def to_action(info, rules) do
-    case info["action_type"] do
-      "pull_request" -> pull_request_to_action(info, rules["pull_request"])
-      "instagram_action" -> instagram_post_to_action(info, rules["instagram_action"])
-    end
-  end
-
-  defp instagram_post_to_action(info, rules) do
-    dharma = Processor.Rating.rate_instagram_post(info, rules)
-
-    action = %{
-      "type" => "action",
-      "action_type" => info["action_type"],
-      "title" => info["post"]["title"],
-      "user" => info["post"]["user"],
-      "stories" => info["post"]["stories"],
-      "dharma" => dharma
-    }
-
-    {:ok, action}
-  end
-
-  # Serialize a pull_request action type to an action structure.
-  defp pull_request_to_action(info, rules) do
-    additions = Enum.map(info["files"], & &1["additions"]) |> Enum.sum()
-    pull = Map.put(info["pull"], "additions", additions)
-
-    info =
-      info
-      |> Map.put("reviews", Enum.map(info["reviews"], & &1["state"]))
-      |> Map.put("pull", pull)
-
-    dharma = Processor.Rating.rate_pull_request(info, rules)
-
-    action = %{
-      "type" => "action",
-      "action_type" => info["action_type"],
-      "owner" => info["owner"],
-      "repo" => info["repo"],
-      "title" => info["pull"]["title"],
-      "number_of_lines" => info["pull"]["additions"],
-      "user" => info["pull"]["user"]["login"],
-      "is_reviewed" => evaluate_reviews(info["reviews"]),
-      "commits" => length(info["commits"]),
-      "dharma" => dharma,
-      "closed_at" => info["pull"]["closed_at"],
-      "created_at" => info["pull"]["created_at"]
-    }
-
-    if Database.validate_user?(action["user"], info["proj_id"]) do
-      {:ok, action}
-    else
-      error_message = "User " <> action["user"] <> " doesn't belong to the project."
-      {:abort, error_message}
-    end
-  end
-
-  # Based on review value checks if it was reviewed or not.
-  defp evaluate_reviews(reviews) do
-    case reviews
-         |> Enum.filter(&(&1 != "COMMENTED"))
-         |> List.last() do
-      "APPROVED" -> "Reviewed"
-      "CHANGES_REQUESTED" -> "Changes Requested and not added"
-      _ -> "Unreviewed"
-    end
+    action_type = info["action_type"]
+    mod = String.to_atom("#{__MODULE__}.#{Macro.camelize(action_type)}")
+    fun = String.to_atom(action_type)
+    apply(mod, fun, [info, rules[action_type]])
   end
 end
