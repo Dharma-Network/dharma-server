@@ -9,7 +9,7 @@ defmodule Processor.RulesAction.InstagramAction do
   def instagram_action(info, rules) do
     dharma = Rating.InstagramAction.rate(info, rules)
 
-    %{
+    action = %{
       "type" => "action",
       "action_type" => info["action_type"],
       "title" => info["post"]["title"],
@@ -17,5 +17,7 @@ defmodule Processor.RulesAction.InstagramAction do
       "stories" => info["post"]["stories"],
       "dharma" => dharma
     }
+
+    {:ok, action}
   end
 end

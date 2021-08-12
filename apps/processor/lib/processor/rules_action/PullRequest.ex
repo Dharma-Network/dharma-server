@@ -18,7 +18,7 @@ defmodule Processor.RulesAction.PullRequest do
 
     dharma = Rating.PullRequest.rate(info, rules)
 
-    %{
+    action = %{
       "type" => "action",
       "action_type" => info["action_type"],
       "owner" => info["owner"],
@@ -32,6 +32,13 @@ defmodule Processor.RulesAction.PullRequest do
       "closed_at" => info["pull"]["closed_at"],
       "created_at" => info["pull"]["created_at"]
     }
+
+    if Database.validate_user?(action["user"], info["proj_id"]) do
+      {:ok, action}
+    else
+      error_message = "User " <> action["user"] <> " doesn't belong to the project."
+      {:abort, error_message}
+    end
   end
 
   # Based on review value checks if it was reviewed or not.
