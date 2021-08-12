@@ -8,6 +8,14 @@ defmodule Processor.RulesAction.PullRequest do
 
   # Serialize a pull_request action type to an action structure.
   def pull_request(info, rules) do
+    additions = Enum.map(info["files"], & &1["additions"]) |> Enum.sum()
+    pull = Map.put(info["pull"], "additions", additions)
+
+    info =
+      info
+      |> Map.put("reviews", Enum.map(info["reviews"], & &1["state"]))
+      |> Map.put("pull", pull)
+
     dharma = Rating.PullRequest.rate(info, rules)
 
     %{
@@ -19,7 +27,7 @@ defmodule Processor.RulesAction.PullRequest do
       "number_of_lines" => info["pull"]["additions"],
       "user" => info["pull"]["user"]["login"],
       "is_reviewed" => evaluate_reviews(info["reviews"]),
-      "commits" => info["pull"]["commits"],
+      "commits" => length(info["commits"]),
       "dharma" => dharma,
       "closed_at" => info["pull"]["closed_at"],
       "created_at" => info["pull"]["created_at"]

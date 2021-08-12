@@ -8,7 +8,7 @@ defmodule Processor.Rules.PullRequest do
       Map.to_list(reward_maps)
       |> Enum.map(fn {k, v} -> {String.to_integer(k), v} end)
       |> Enum.sort_by(fn {k, _v} -> k end, :desc)
-      |> Enum.find(&(additions >= elem(&1, 0)))
+      |> Enum.find({additions, 0}, &(additions >= elem(&1, 0)))
 
     {{"number_of_lines", nol}, val}
   end
