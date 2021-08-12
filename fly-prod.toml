@@ -2,8 +2,3 @@ app = "dharma-prod"
 
 kill_signal = "SIGTERM"
 kill_timeout = 5
-
-[env]
-
-[deploy]
-  release_command = "/app/bin/dharma_server start"

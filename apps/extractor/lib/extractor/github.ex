@@ -29,7 +29,7 @@ defmodule Extractor.Github do
       case Database.get_github_sources() do
         {:error, error_msg} ->
           Logger.critical(error_msg)
-          []
+          %{}
 
         {:ok, sources} ->
           sources
