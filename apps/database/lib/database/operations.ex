@@ -19,7 +19,7 @@ defmodule Database.Operations do
   def get_github_sources do
     query = %{
       selector: %{project_type: %{"$eq": "github"}, type: %{"$eq": "project"}},
-      fields: ["list_of_urls"]
+      fields: ["_id", "list_of_urls"]
     }
 
     case post_with_retry(db_name() <> "/_find", query) do
@@ -44,7 +44,7 @@ defmodule Database.Operations do
     |> Enum.flat_map(fn doc ->
       Enum.map(doc["list_of_urls"], fn url ->
         [_, owner, repo] = Regex.run(~r/.*\/(.*)\/(.*)$/, url)
-        {{owner, repo}, ""}
+        {{owner, repo, doc["_id"]}, ""}
       end)
     end)
     |> Enum.into(%{}, & &1)
@@ -136,6 +136,31 @@ defmodule Database.Operations do
         Logger.critical("Error in fetch_changes with the
              following reason: " <> reason)
         []
+    end
+  end
+
+  def validate_user?(user_nickname, project_id) do
+    query = %{
+      selector: %{
+        "$and": [
+          %{type: %{"$eq": "user"}},
+          %{nickname: %{"$eq": user_nickname}},
+          %{list_of_projects: %{"$elemMatch": %{"$eq": project_id}}}
+        ]
+      }
+    }
+
+    resp = post_with_retry(mango_query_url(), query)
+
+    case resp do
+      {:ok, res} ->
+        case res.body["docs"] do
+          [] -> false
+          _ -> true
+        end
+
+      {:error, _} ->
+        false
     end
   end
 

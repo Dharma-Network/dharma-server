@@ -61,21 +61,21 @@ defmodule Processor do
   defp process_and_send(payload, meta, state) do
     info = Jason.decode!(payload)
     Logger.info("[#{meta.routing_key}] #{info["action_type"]}", label: "[x] Received")
-    action_json = process(info, state) |> Jason.encode!()
-    send("insert.processed.actions", action_json, state.channel)
-  end
 
-  # Processes the `message`, preparing it to be inserted in the processed queues.
-  # Identity for now, will change later on!
-  defp process(info, state) do
-    Processor.RulesAction.to_action(info, state.rules)
+    case Processor.RulesAction.to_action(info, state.rules) do
+      {:abort, error_message} ->
+        Logger.info(error_message)
+
+      {:ok, action} ->
+        action_json = Jason.encode!(action)
+        send("insert.processed.actions", action_json, state.channel)
+    end
   end
 
   # Sends a `message` in the exchange "dharma", in a certain channel, with a `topic`.
   @spec send(String.t(), any, AMQP.Channel.t()) :: :ok
   defp send(topic, message, channel) do
     AMQP.Basic.publish(channel, dharma_exchange(), topic, message)
-    Logger.info("[#{topic}] #{message}", label: "[x] Sent ")
   end
 
   @impl true

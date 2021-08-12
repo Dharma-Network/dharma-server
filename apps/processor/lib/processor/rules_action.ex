@@ -17,7 +17,7 @@ defmodule Processor.RulesAction do
   defp instagram_post_to_action(info, rules) do
     dharma = Processor.Rating.rate_instagram_post(info, rules)
 
-    %{
+    action = %{
       "type" => "action",
       "action_type" => info["action_type"],
       "title" => info["post"]["title"],
@@ -25,13 +25,23 @@ defmodule Processor.RulesAction do
       "stories" => info["post"]["stories"],
       "dharma" => dharma
     }
+
+    {:ok, action}
   end
 
   # Serialize a pull_request action type to an action structure.
   defp pull_request_to_action(info, rules) do
+    additions = Enum.map(info["files"], & &1["additions"]) |> Enum.sum()
+    pull = Map.put(info["pull"], "additions", additions)
+
+    info =
+      info
+      |> Map.put("reviews", Enum.map(info["reviews"], & &1["state"]))
+      |> Map.put("pull", pull)
+
     dharma = Processor.Rating.rate_pull_request(info, rules)
 
-    %{
+    action = %{
       "type" => "action",
       "action_type" => info["action_type"],
       "owner" => info["owner"],
@@ -40,11 +50,18 @@ defmodule Processor.RulesAction do
       "number_of_lines" => info["pull"]["additions"],
       "user" => info["pull"]["user"]["login"],
       "is_reviewed" => evaluate_reviews(info["reviews"]),
-      "commits" => info["pull"]["commits"],
+      "commits" => length(info["commits"]),
       "dharma" => dharma,
       "closed_at" => info["pull"]["closed_at"],
       "created_at" => info["pull"]["created_at"]
     }
+
+    if Database.validate_user?(action["user"], info["proj_id"]) do
+      {:ok, action}
+    else
+      error_message = "User " <> action["user"] <> " doesn't belong to the project."
+      {:abort, error_message}
+    end
   end
 
   # Based on review value checks if it was reviewed or not.
