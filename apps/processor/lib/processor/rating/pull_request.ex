@@ -13,7 +13,7 @@ defmodule Processor.Rating.PullRequest do
         "is_merged" => true,
         "is_reviewed" => rate_reviews(info["reviews"])
       }
-      |> Processor.Rules.evaluate_rules(rules)
+      |> Processor.Rules.evaluate_rules(rules, info["action_type"])
 
     dharma
   end

@@ -14,7 +14,7 @@ defmodule Processor do
   def start_link(_opts) do
     rules = Database.get_rules()
 
-    GenServer.start_link(__MODULE__, %{rules: rules}, [{:name, __MODULE__}])
+    GenServer.start_link(__MODULE__, %{rules: rules, users: %{}}, [{:name, __MODULE__}])
   end
 
   @impl true
@@ -41,7 +41,8 @@ defmodule Processor do
     new_state = Map.put(state, :channel, channel)
 
     AMQP.Queue.subscribe(channel, "raw_input", fn payload, meta ->
-      process_and_send(payload, meta, new_state)
+      users = process_and_send(payload, meta, new_state)
+      GenServer.cast(__MODULE__, {:update_users, users})
     end)
 
     new_state
@@ -62,13 +63,15 @@ defmodule Processor do
     info = Jason.decode!(payload)
     Logger.info("[#{meta.routing_key}] #{info["action_type"]}", label: "[x] Received")
 
-    case Processor.RulesAction.to_action(info, state.rules) do
+    case Processor.RulesAction.to_action(info, state.rules, state.users) do
       {:abort, error_message} ->
         Logger.info(error_message)
+        state.users
 
-      {:ok, action} ->
+      {:ok, action, users} ->
         action_json = Jason.encode!(action)
         send("insert.processed.actions", action_json, state.channel)
+        users
     end
   end
 
@@ -88,5 +91,11 @@ defmodule Processor do
     Logger.info("Reloading rules on processor!")
     rules = Database.get_rules()
     {:noreply, Map.put(state, :rules, rules)}
+  end
+
+  @impl true
+  def handle_cast({:update_users, new_users}, state) do
+    new_state = Map.put(state, :users, new_users)
+    {:noreply, new_state}
   end
 end

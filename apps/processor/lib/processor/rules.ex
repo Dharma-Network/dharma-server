@@ -13,7 +13,7 @@ defmodule Processor.Rules do
     info
     |> Enum.reduce_while({0, %{}}, fn {k, v}, {r, map} ->
       case apply(mod, String.to_atom(k), [v, reward_maps[k]]) do
-        {id, "abort"} -> {:halt, {id, 0}}
+        {id, "abort"} -> {:halt, {0, id}}
         {id, reward} -> {:cont, {r + reward, Map.put(map, id, reward)}}
       end
     end)

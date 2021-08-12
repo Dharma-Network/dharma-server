@@ -7,7 +7,7 @@ defmodule Processor.RulesAction.PullRequest do
   alias Processor.Rating
 
   # Serialize a pull_request action type to an action structure.
-  def pull_request(info, rules) do
+  def pull_request(info, rules, users) do
     additions = Enum.map(info["files"], & &1["additions"]) |> Enum.sum()
     pull = Map.put(info["pull"], "additions", additions)
 
@@ -18,6 +18,8 @@ defmodule Processor.RulesAction.PullRequest do
 
     dharma = Rating.PullRequest.rate(info, rules)
 
+    user = info["pull"]["user"]["login"]
+
     action = %{
       "type" => "action",
       "action_type" => info["action_type"],
@@ -25,7 +27,7 @@ defmodule Processor.RulesAction.PullRequest do
       "repo" => info["repo"],
       "title" => info["pull"]["title"],
       "number_of_lines" => info["pull"]["additions"],
-      "user" => info["pull"]["user"]["login"],
+      "user" => user,
       "is_reviewed" => evaluate_reviews(info["reviews"]),
       "commits" => length(info["commits"]),
       "dharma" => dharma,
@@ -33,11 +35,18 @@ defmodule Processor.RulesAction.PullRequest do
       "created_at" => info["pull"]["created_at"]
     }
 
-    if Database.validate_user?(action["user"], info["proj_id"]) do
-      {:ok, action}
-    else
-      error_message = "User " <> action["user"] <> " doesn't belong to the project."
-      {:abort, error_message}
+    cond do
+      Map.has_key?(users, user) and
+          Enum.member?(users[user], info["proj_id"]) ->
+        {:ok, action, users}
+
+      Database.validate_user?(action["user"], info["proj_id"]) ->
+        users = Map.put(users, user, [user | users[user]])
+        {:ok, action, users}
+
+      true ->
+        error_message = "User " <> action["user"] <> " doesn't belong to the project."
+        {:abort, error_message}
     end
   end
 
