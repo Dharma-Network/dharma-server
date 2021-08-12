@@ -25,19 +25,7 @@ defmodule Extractor.Github do
   """
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(_opts) do
-    sources =
-      case Database.get_github_sources() do
-        {:error, error_msg} ->
-          Logger.critical(error_msg)
-          %{}
-
-        {:ok, sources} ->
-          sources
-      end
-
-    GenServer.start_link(__MODULE__, %{source: sources}, [
-      {:name, __MODULE__}
-    ])
+    GenServer.start_link(__MODULE__, %{}, [{:name, __MODULE__}])
   end
 
   # Fetch pull time.
@@ -51,37 +39,67 @@ defmodule Extractor.Github do
   Callbacks for GenServer.Behaviour.
   """
   @impl true
-  def init(state) do
-    new_state = start_connection(state)
+  def init(_state) do
+    state = build_state()
+    new_state = timer(state)
+    {:ok, new_state}
+  end
+
+  defp build_state do
+    sources =
+      case Database.get_github_sources() do
+        {:error, error_msg} ->
+          Logger.critical(error_msg)
+          []
+
+        {:ok, sources} ->
+          sources
+      end
+
+    conn = Extractor.Github.start_connection()
     github_token = Application.get_env(:extractor, :github_token)
     client = Tentacat.Client.new(%{access_token: github_token})
-    new_state = timer(Map.put(new_state, :client, client))
-    {:ok, new_state}
+    Map.merge(%{client: client, source: sources}, conn)
+  end
+
+  @doc """
+  Calls the :fetch_from endpoint with the provided date.
+  Date format: YY-MM-DD HH-MM-SS
+  """
+  @spec fetch_from(String.t()) :: :ok
+  def fetch_from(date) do
+    case NaiveDateTime.from_iso8601(date) do
+      {:ok, ndt} ->
+        GenServer.cast(__MODULE__, {:fetch_from, ndt})
+
+      {:error, reason} ->
+        Logger.info("Failed to convert #{date} because #{reason}.")
+    end
   end
 
   defp fetch(state) do
     # For each individual fetch, accumulate the data provided and store the new etag that github sends back.
     {new_sources, data} =
-      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo}, etag}, acc = {map, list} ->
-        case fetch(state, owner, repo, etag) do
+      Enum.reduce(state.source, {%{}, []}, fn {{owner, repo, proj_id}, etag}, {map, list} ->
+        case fetch(state, owner, repo, proj_id, etag) do
           {new_etag, value} ->
             {Map.put(map, {owner, repo}, new_etag), [value | list]}
 
           nil ->
-            acc
+            {Map.put(map, {owner, repo}, etag), list}
         end
       end)
 
-    {Map.put(state, :source, new_sources), data}
+    {Map.put(state, :source, new_sources), Enum.concat(data)}
   end
 
   # Fetches recent pulls.
-  defp fetch(state, owner, repo, etag) do
+  defp fetch(state, owner, repo, proj_id, etag) do
     # Set a extra header to contain the etag header (only if it's not empty)
     Logger.info("#{owner} #{repo}", label: "fetching from ")
     Application.put_env(:tentacat, :extra_headers, [{"If-None-Match", "#{etag}"}])
 
-    case efficient_pulling(state.client, owner, repo, state.date) do
+    case efficient_pulling(state.client, owner, repo, state.date, proj_id) do
       {[], _resp} ->
         nil
 
@@ -96,7 +114,7 @@ defmodule Extractor.Github do
 
   # Obtain pulls sorted by most recent closed order.
   # We use take_while to avoid going through any pull that's before from.
-  defp efficient_pulling(client, owner, repo, from) do
+  defp efficient_pulling(client, owner, repo, from, proj_id) do
     filters = %{state: "closed", sort: "updated", direction: "desc"}
 
     case Tentacat.Pulls.filter(client, owner, repo, filters) do
@@ -109,7 +127,7 @@ defmodule Extractor.Github do
             valid_time?(dt, from)
           end)
           |> Enum.filter(&is_merged?(&1, client, owner, repo))
-          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo) end)
+          |> Enum.map(fn pull -> extract_relevant_data(pull, client, owner, repo, proj_id) end)
 
         {value, resp}
 
@@ -125,12 +143,13 @@ defmodule Extractor.Github do
   end
 
   # Filters relevant data from a pull request.
-  def extract_relevant_data(pull, client, owner, repo) do
+  def extract_relevant_data(pull, client, owner, repo, proj_id) do
     {_status, files, _resp} = Files.list(client, owner, repo, pull["number"])
     {_status, reviews, _resp} = Reviews.list(client, owner, repo, pull["number"])
     {_status, commits, _resp} = Commits.list(client, owner, repo, pull["number"])
 
     %{
+      proj_id: proj_id,
       owner: owner,
       repo: repo,
       action_type: "pull_request",
@@ -139,10 +158,6 @@ defmodule Extractor.Github do
       files: files,
       commits: commits
     }
-
-    # Enum.map(files, fn file ->
-    # %{filename: file["filename"], additions: file["additions"], status: file["status"]}
-    # end)
   end
 
   # Retrieves the ETag from a response, will be needed when we implement conditional requests.
@@ -185,6 +200,25 @@ defmodule Extractor.Github do
     {:noreply, new_state}
   end
 
+  @impl true
+  def handle_cast({:fetch_from, date}, state) do
+    hacked = Map.put(state, :date, date)
+    data = elem(fetch(hacked), 1)
+
+    if data != [] do
+      Enum.each(data, fn pull_data ->
+        pull_data
+        |> Jason.encode!()
+        |> send(@source, state.channel)
+
+        info = pull_data.pull
+        Logger.info(info["url"] <> ": " <> info["title"])
+      end)
+    end
+
+    {:noreply, state}
+  end
+
   # Update DateTime and schedule pull.
   defp timer(state) do
     date = DateTime.utc_now()
@@ -201,12 +235,12 @@ defmodule Extractor.Github do
   end
 
   # Start a connection with RabbitMQ and declare an exchange.
-  defp start_connection(state) do
+  def start_connection do
     url = Application.fetch_env!(:extractor, :rabbit_url)
     {:ok, connection} = AMQP.Connection.open(url)
     {:ok, channel} = AMQP.Channel.open(connection)
     AMQP.Exchange.declare(channel, dharma_exchange(), :topic)
-    Map.merge(state, %{connection: connection, channel: channel})
+    %{connection: connection, channel: channel}
   end
 
   # Publishes a message to an Exchange.
@@ -214,7 +248,6 @@ defmodule Extractor.Github do
   defp send(message, source, channel) do
     topic = "insert.raw." <> source
     AMQP.Basic.publish(channel, dharma_exchange(), topic, message, persistent: true)
-    Logger.info("[#{topic}] #{message}", label: "[x] Sent")
   end
 
   # Close RabbitMQ connection.
