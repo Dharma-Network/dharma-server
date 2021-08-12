@@ -31,6 +31,14 @@ defmodule Processor.RulesAction do
 
   # Serialize a pull_request action type to an action structure.
   defp pull_request_to_action(info, rules) do
+    additions = Enum.map(info["files"], & &1["additions"]) |> Enum.sum()
+    pull = Map.put(info["pull"], "additions", additions)
+
+    info =
+      info
+      |> Map.put("reviews", Enum.map(info["reviews"], & &1["state"]))
+      |> Map.put("pull", pull)
+
     dharma = Processor.Rating.rate_pull_request(info, rules)
 
     action = %{
@@ -39,7 +47,7 @@ defmodule Processor.RulesAction do
       "owner" => info["owner"],
       "repo" => info["repo"],
       "title" => info["pull"]["title"],
-      "number_of_lines" => Enum.map(info["files"], & &1["additions"]) |> Enum.sum(),
+      "number_of_lines" => info["pull"]["additions"],
       "user" => info["pull"]["user"]["login"],
       "is_reviewed" => evaluate_reviews(info["reviews"]),
       "commits" => length(info["commits"]),
