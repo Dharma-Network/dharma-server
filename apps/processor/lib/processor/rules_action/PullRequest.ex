@@ -28,9 +28,10 @@ defmodule Processor.RulesAction.PullRequest do
 
   # Based on review value checks if it was reviewed or not.
   defp evaluate_reviews(reviews) do
-    case reviews
-         |> Enum.filter(&(&1 != "COMMENTED"))
-         |> List.last() do
+    reviews
+    |> Enum.filter(&(&1 != "COMMENTED"))
+    |> List.last()
+    |> case do
       "APPROVED" -> "Reviewed"
       "CHANGES_REQUESTED" -> "Changes Requested and not added"
       _ -> "Unreviewed"
