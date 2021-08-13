@@ -6,7 +6,7 @@ defmodule Processor.RulesAction.InstagramAction do
 
   alias Processor.Rating
 
-  def instagram_action(info, rules) do
+  def instagram_action(info, rules, users) do
     dharma = Rating.InstagramAction.rate(info, rules)
 
     action = %{
@@ -18,6 +18,6 @@ defmodule Processor.RulesAction.InstagramAction do
       "dharma" => dharma
     }
 
-    {:ok, action}
+    {:ok, action, users}
   end
 end

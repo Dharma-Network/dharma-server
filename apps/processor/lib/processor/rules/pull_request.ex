@@ -14,10 +14,12 @@ defmodule Processor.Rules.PullRequest do
   end
 
   def is_reviewed(review_status, reward_maps) do
+    id = {"is_reviewed", Atom.to_string(review_status)}
+
     case review_status do
-      :positive -> {{"is_reviewed", "positive"}, reward_maps["positive"]}
-      :negative -> {{"is_reviewed", "negative"}, reward_maps["negative"]}
-      :unreviewed -> {{"is_reviewed", "unreviewed"}, reward_maps["unreviewed"]}
+      :positive -> {id, reward_maps["positive"]}
+      :negative -> {id, reward_maps["negative"]}
+      :unreviewed -> {id, reward_maps["unreviewed"]}
     end
   end
 

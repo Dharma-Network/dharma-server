@@ -7,10 +7,10 @@ defmodule Processor.RulesAction do
   @doc """
   Transforms information based on action types to an action structure.
   """
-  def to_action(info, rules) do
+  def to_action(info, rules, users) do
     action_type = info["action_type"]
     mod = String.to_atom("#{__MODULE__}.#{Macro.camelize(action_type)}")
     fun = String.to_atom(action_type)
-    apply(mod, fun, [info, rules[action_type]])
+    apply(mod, fun, [info, rules[action_type], users])
   end
 end
