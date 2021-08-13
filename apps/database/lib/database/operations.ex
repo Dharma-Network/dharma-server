@@ -177,4 +177,8 @@ defmodule Database.Operations do
         :fail
     end
   end
+
+  def put_to_db(endpoint, body) do
+    put(client(), endpoint, body)
+  end
 end
