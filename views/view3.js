@@ -1,7 +1,7 @@
 {
   "views": {
     "all": {
-      "map": "function(doc) { emit(doc.title, doc) }",
+      "map": "function(doc) { emit(doc.title, doc) }"
     }
   }
 }

@@ -20,14 +20,15 @@ defmodule Mix.Tasks.Push.CouchViews do
       file_striped = hd(Regex.run(~r/(?<=\/).*(?=\.)/, file))
 
       endpoint =
-        url <>
-          "/" <>
-          Application.fetch_env!(:database, :name_db) <>
-          "/_design/" <>
-          file_striped
+        (url <>
+           "/" <>
+           Application.fetch_env!(:database, :name_db) <>
+           "/_design/" <>
+           file_striped)
+        |> IO.inspect()
 
       {:ok, fp} = File.open(file, [:read])
-      Database.put_to_db(endpoint, IO.read(fp, :all))
+      Database.put_to_db(endpoint, IO.read(fp, :all) |> Jason.decode!())
     end)
   end
 end
