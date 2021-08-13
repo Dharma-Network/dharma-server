@@ -15,19 +15,24 @@ defmodule Mix.Tasks.Push.CouchViews do
         _ -> Application.fetch_env!(:database, :url_db)
       end
 
-    Path.wildcard("views/*")
-    |> Enum.each(fn file ->
-      file_striped = hd(Regex.run(~r/(?<=\/).*(?=\.)/, file))
+    endpoint =
+      url <>
+        Application.fetch_env!(:database, :name_db) <>
+        "/_design/designdocs"
 
-      endpoint =
-        url <>
-          "/" <>
-          Application.fetch_env!(:database, :name_db) <>
-          "/_design/" <>
-          file_striped
+    views =
+      Path.wildcard("views/*")
+      |> Enum.map(fn file ->
+        file_striped = hd(Regex.run(~r/(?<=\/).*(?=\.)/, file))
 
-      {:ok, fp} = File.open(file, [:read])
-      Database.put_to_db(endpoint, IO.read(fp, :all) |> Jason.decode!())
-    end)
+        {:ok, fp} = File.open(file, [:read])
+        view = IO.read(fp, :all) |> Jason.decode!()
+        {file_striped, view}
+      end)
+      |> Enum.into(%{}, & &1)
+
+    {:ok, resp} = Database.get_from_db("_design/designdocs")
+
+    Database.put_to_db(endpoint, %{"views" => views}, rev: resp.body["_rev"])
   end
 end

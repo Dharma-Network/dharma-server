@@ -7,5 +7,6 @@ defmodule Database do
   defdelegate fetch_changes(), to: Database.Operations
   defdelegate post_to_db(path \\ "", body), to: Database.Operations
   defdelegate validate_user?(user_nickname, proj_id), to: Database.Operations
-  defdelegate put_to_db(endpoint, body), to: Database.Operations
+  defdelegate put_to_db(endpoint, body, query \\ []), to: Database.Operations
+  defdelegate get_from_db(path, query \\ []), to: Database.Operations
 end
