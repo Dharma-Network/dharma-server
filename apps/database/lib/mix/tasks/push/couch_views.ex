@@ -43,21 +43,31 @@ defmodule Mix.Tasks.Push.CouchViews do
         Database.put_to_db(endpoint <> designdoc_stripped, %{"views" => views},
           rev: resp.body["_rev"]
         )
-        |> IO.inspect()
     end
   end
 
   defp create_view(query) do
-    map = read_query(query, "/map.js")
-    red = read_query(query, "/reduce.js")
-    query_name = String.split(query, "/") |> List.last()
-    {query_name, %{map: map, reduce: red}}
-  end
+    ret = %{}
 
-  defp read_query(path, file) do
-    case File.read(path <> file) do
-      {:ok, content} -> content
-      {:error, _} -> ""
-    end
+    ret =
+      case File.read(query <> "/map.js") do
+        {:ok, content} ->
+          Map.put(ret, :map, content)
+
+        _ ->
+          ret
+      end
+
+    ret =
+      case File.read(query <> "/reduce.js") do
+        {:ok, content} ->
+          Map.put(ret, :reduce, content)
+
+        _ ->
+          ret
+      end
+
+    query_name = String.split(query, "/") |> List.last()
+    {query_name, ret}
   end
 end
