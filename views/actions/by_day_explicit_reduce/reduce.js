@@ -1,14 +1,15 @@
 function (key, values, rereduce) {
     var result = {};
-    for (i = 0; i < values.length; i++) {
-        if (rereduce) {
-            for (const [key, value] of Object.entries(values[i])) {
+    if (rereduce) {
+      for (i = 0; i < values.length; i++) {
+        for (const [key, value] of Object.entries(values[i])) {
                 if (result[key] === undefined) result[key] = value
                 else {
                     result[key]++
                 }
             }
-        } else {
+      }
+    } else {
             values.forEach(dt => {
                 date = new Date(dt);
                 dt_str = date.toDateString();
@@ -17,6 +18,5 @@ function (key, values, rereduce) {
                 else result[key]++
             })
         }
-    }
     return (result)
 }
