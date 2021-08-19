@@ -64,7 +64,7 @@ defmodule Extractor.Github do
 
   @doc """
   Calls the :fetch_from endpoint with the provided date.
-  Date format: YY-MM-DD HH-MM-SS
+  Date format: YY-MM-DD HH:MM:SS
   """
   @spec fetch_from(String.t()) :: :ok
   def fetch_from(date) do

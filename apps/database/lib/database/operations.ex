@@ -178,7 +178,11 @@ defmodule Database.Operations do
     end
   end
 
-  def put_to_db(endpoint, body) do
-    put(client(), endpoint, body)
+  def put_to_db(endpoint, body, query \\ []) do
+    put(client(), endpoint, body, query: query)
+  end
+
+  def get_from_db(path, query \\ []) do
+    get(client(), "/" <> db_name() <> "/" <> path, query: query)
   end
 end

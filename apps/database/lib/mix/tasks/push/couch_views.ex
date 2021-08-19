@@ -15,19 +15,59 @@ defmodule Mix.Tasks.Push.CouchViews do
         _ -> Application.fetch_env!(:database, :url_db)
       end
 
+    endpoint =
+      url <>
+        Application.fetch_env!(:database, :name_db) <>
+        "/_design/"
+
     Path.wildcard("views/*")
-    |> Enum.each(fn file ->
-      file_striped = hd(Regex.run(~r/(?<=\/).*(?=\.)/, file))
-
-      endpoint =
-        url <>
-          "/" <>
-          Application.fetch_env!(:database, :name_db) <>
-          "/_design/" <>
-          file_striped
-
-      {:ok, fp} = File.open(file, [:read])
-      Database.put_to_db(endpoint, IO.read(fp, :all) |> Jason.decode!())
+    |> Enum.each(fn designdoc ->
+      handle_design_doc(endpoint, designdoc)
     end)
+  end
+
+  defp handle_design_doc(endpoint, designdoc) do
+    views =
+      Path.wildcard(designdoc <> "/*")
+      |> Enum.map(fn query -> create_view(query) end)
+      |> Enum.into(%{}, & &1)
+
+    designdoc_stripped = designdoc |> String.split("/") |> List.last()
+    {:ok, resp} = Database.get_from_db("_design/" <> designdoc_stripped)
+
+    case resp.body["_rev"] do
+      nil ->
+        Database.put_to_db(endpoint <> designdoc_stripped, %{"views" => views})
+
+      _ ->
+        Database.put_to_db(endpoint <> designdoc_stripped, %{"views" => views},
+          rev: resp.body["_rev"]
+        )
+    end
+  end
+
+  defp create_view(query) do
+    ret = %{}
+
+    ret =
+      case File.read(query <> "/map.js") do
+        {:ok, content} ->
+          Map.put(ret, :map, content)
+
+        _ ->
+          ret
+      end
+
+    ret =
+      case File.read(query <> "/reduce.js") do
+        {:ok, content} ->
+          Map.put(ret, :reduce, content)
+
+        _ ->
+          ret
+      end
+
+    query_name = String.split(query, "/") |> List.last()
+    {query_name, ret}
   end
 end
