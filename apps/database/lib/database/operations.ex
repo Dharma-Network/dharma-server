@@ -39,6 +39,30 @@ defmodule Database.Operations do
     end
   end
 
+  def find_action(external_id) do
+    query = %{
+      selector: %{type: %{"$eq": "action"}, external_id: %{"$eq": external_id}},
+      fields: ["_id"]
+    }
+
+    case post_with_retry(db_name() <> "/_find", query) do
+      {:ok, resp} ->
+        case resp.body["docs"] do
+          nil ->
+            false
+
+          [] ->
+            false
+
+          _docs ->
+            true
+        end
+
+      {:error, _reason} ->
+        false
+    end
+  end
+
   defp extract_sources(docs) do
     docs
     |> Enum.flat_map(fn doc ->
