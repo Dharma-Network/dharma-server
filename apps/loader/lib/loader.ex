@@ -58,11 +58,15 @@ defmodule Loader do
 
   # Process the payload and send it to the correct topic.
   defp send_to_database(payload, meta) do
-    Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Received ")
+    json = Jason.decode!(payload)
 
-    Jason.decode!(payload)
-    |> Map.put("_id", UUID.uuid1())
-    |> Database.post_to_db()
+    if !Database.find_action(json["external_id"]) do
+      Logger.info("[#{meta.routing_key}] #{payload}", label: "[x] Inserted ")
+
+      json
+      |> Map.put("_id", UUID.uuid1())
+      |> Database.post_to_db()
+    end
   end
 
   defp send_to_blockchain(_payload, _meta, _state) do

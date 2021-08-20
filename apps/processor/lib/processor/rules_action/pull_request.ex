@@ -32,7 +32,8 @@ defmodule Processor.RulesAction.PullRequest do
       "commits" => length(info["commits"]),
       "dharma" => dharma,
       "closed_at" => info["pull"]["closed_at"],
-      "created_at" => info["pull"]["created_at"]
+      "created_at" => info["pull"]["created_at"],
+      "external_id" => info["pull"]["id"]
     }
 
     cond do
